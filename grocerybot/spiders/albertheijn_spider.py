@@ -23,7 +23,7 @@ class AlbertHeijnSpider(CrawlSpider):
         self.logger.info('Traversing..')
 
     def parse_item(self, response):
-        self.logger.info('Item: ', response.url)
+        self.logger.info('Found item: ', response.url)
         # page = response.url.split("/")[-1]
         # filename = 'ah-%s.html' % page
         # with open(filename, 'wb') as f:
