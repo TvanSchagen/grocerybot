@@ -6,29 +6,40 @@ class LidlSpider(scrapy.Spider):
 
     start_urls = [
         'https://www.lidl.nl/nl/Acties.htm',
+        'https://www.lidl.nl/nl/Acties.htm?id=546&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=546&week=2',
+        'https://www.lidl.nl/nl/Acties.htm?id=347&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=348&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=372&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=372&week=2',
+        'https://www.lidl.nl/nl/Acties.htm?id=398&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=398&week=2',
+        'https://www.lidl.nl/nl/Acties.htm?id=568&week=1',
+        'https://www.lidl.nl/nl/Acties.htm?id=558&week=1',
+        'https://www.lidl.nl/nl/Nieuw-bij-Lidl.htm',
+        'https://www.lidl.nl/nl/De-goedkoopste-van-Nederland-9047.htm',
+        'https://www.lidl.nl/nl/Blijvend-in-prijs-verlaagd.htm',
+        'https://www.lidl.nl/nl/Goed-getest.htm'
     ]
 
+    custom_settings = {
+        'DOWNLOAD_DELAY': 0.5
+    }
+
     def parse(self, response):
-        # for quote in response.css('div.quote'):
-        #     text = quote.css("span.text::text").get()
-        #     author = quote.css("small.author::text").get()
-        #     tags = quote.css("div.tags a.tag::text").getall()
-        #
-        #     yield dict(text=text, author=author, tags=tags)
-
-        # General ways to follow a link
-        # next_page = response.css('li.next a::attr(href)').get()
-        # if next_page is not None:
-        #     yield response.follow(next_page, callback=self.parse)
-
-        # If the link is inside an anchor tag
-
         for a in response.css('li.productgrid__item a.product__body::attr(href)').getall():
             yield response.follow(a, callback=self.parse_product)
 
     def parse_product(self, response):
         title = response.css('h1.attributebox__headline--h1::text').get()
-        yield dict(title=title)
+        page_title = response.css('title::text').get()
+
+        filename = 'data/lidl/lidl-%s.html' % title
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s' % filename)
+
+        yield dict(title=title, pageTitle=page_title, url=response.url)
 
         for a in response.css('div.product.product--tile a.product__body::attr(href)').getall():
             yield response.follow(a, callback=self.parse_product)
