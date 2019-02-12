@@ -1,5 +1,14 @@
 .vscode/
 env/
+\.idea/
+venv/
+
+grocerybot/__pycache__/
+
+grocerybot/spiders/__pycache__/
+
+data/lidl/
+
 data/
 
 
