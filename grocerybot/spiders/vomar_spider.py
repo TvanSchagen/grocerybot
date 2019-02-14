@@ -28,10 +28,13 @@ class VomarSpider(scrapy.Spider):
         title = response.css('div.container div.container h1::text').get()
         page_title = response.css('title::text').get()
         page_title = page_title.replace('/', '')
-        page_title = page_title.replace('_', '')
+        # page_title = page_title.replace('_', '')
 
         filename = 'data/vomar/vomar-%s.html' % title
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+        try:
+            with open(filename, 'wb') as f:
+                f.write(response.body)
+        except:
+            return
 
         yield dict(title=title, pageTitle=page_title, url=response.url)
