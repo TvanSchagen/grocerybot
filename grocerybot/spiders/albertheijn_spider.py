@@ -32,20 +32,36 @@ class ProductsSpider(scrapy.Spider):
 
         # Find the lanes that correspond to filters - these are the ones containing links to subcategory requests
         filter_lane = next(lane for lane in json_res if lane['id'] == 'Filters')
-        subcat_filters = next(sub for sub in filter_lane['_embedded']['items'][0]['_embedded']['filters'] if sub['label'] == 'Soort')
+        subcat_filters = next(
+            (sub for sub in filter_lane['_embedded']['items'][0]['_embedded']['filters'] if sub['label'] == 'Soort'), -1)
 
-        for item in subcat_filters['_embedded']['filterItems']:
-            href = str(item[u'navItem'][u'link'][u'href'])
+        # If no 'Soort' section is found, then there are no more filters to be applied, so we crawl the product.
+        if subcat_filters == -1:
+            # Find the lane that corresponds to products.
+            product_lane = next(lane for lane in json_res if lane['type'] == 'ProductLane')
+            for item in product_lane['_embedded']['items']:
+                href = str(item[u'navItem'][u'link'][u'href'])
+                yield response.follow(f'{self.root_url}?url={href}', self.parse_products)
+        # If a Soort section is found, we follow this link recursively.
+        else:
+            for item in subcat_filters['_embedded']['filterItems']:
+                href = str(item[u'navItem'][u'link'][u'href'])
 
-            yield response.follow(f'{self.root_url}?url={href}', self.parse_sub_categories)
-
-    def parse_sub_categories(self, response):
-        self.logger.info(response.url)
+                yield response.follow(f'{self.root_url}?url={href}', self.parse_categories)
 
     def parse_products(self, response):
-        self.logger.info('product: %s' % response.url)
-        title = "todo"
-        filename = 'data/ah/%s.html' % title
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.logger.info('Saved file %s' % filename)
+        json_res = parse_json_response(response)
+        page_title = json_res['title']
+        json_res = json_res[u'_embedded'][u'lanes']
+
+        # Get the ProductDetailLane
+        product_lane = next(lane for lane in json_res if lane['type'] == 'ProductDetailLane')
+        product_details = product_lane['_embedded']['items'][0]
+        if product_details:
+            title = product_details['_embedded']['product']['description']
+
+            filename = f'data/ah/{title}.html'
+            with open(filename, 'wb') as f:
+                f.write(response.body)
+
+            yield dict(title=title, pageTitle=page_title, url=response.url)
