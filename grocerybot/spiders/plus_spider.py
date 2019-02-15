@@ -1,6 +1,5 @@
 import scrapy
-
-
+from datetime import datetime as dt
 class ProductsSpider(scrapy.Spider):
     name = 'plus_products'
 
@@ -27,6 +26,11 @@ class ProductsSpider(scrapy.Spider):
     def save_product(self, response):
         page = response.url.split("/")[-1]
         filename = 'data/plus/%s.html' % page
+
+        title = response.css('div.pdp-right-block h1::text').get()
+
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log('Saved file %s' % filename)
+
+        yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)

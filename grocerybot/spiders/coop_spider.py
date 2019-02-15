@@ -1,5 +1,5 @@
 import scrapy
-
+from datetime import datetime as dt
 
 class ProductsSpider(scrapy.Spider):
     name = 'coop'
@@ -29,3 +29,5 @@ class ProductsSpider(scrapy.Spider):
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.logger.info('Saved file %s' % filename)
+
+        yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)

@@ -1,5 +1,5 @@
 import scrapy
-
+from datetime import datetime as dt
 
 class LidlSpider(scrapy.Spider):
     name = "lidl"
@@ -39,7 +39,8 @@ class LidlSpider(scrapy.Spider):
             f.write(response.body)
         self.log('Saved file %s' % filename)
 
-        yield dict(title=title, pageTitle=page_title, url=response.url)
+        yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)
 
         for a in response.css('div.product.product--tile a.product__body::attr(href)').getall():
             yield response.follow(a, callback=self.parse_product)
+

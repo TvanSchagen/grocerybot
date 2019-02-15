@@ -1,5 +1,5 @@
 import scrapy
-
+from datetime import datetime as dt
 
 class VomarSpider(scrapy.Spider):
     name = "vomar"
@@ -37,4 +37,4 @@ class VomarSpider(scrapy.Spider):
         except:
             return
 
-        yield dict(title=title, pageTitle=page_title, url=response.url)
+        yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)

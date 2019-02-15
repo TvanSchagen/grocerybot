@@ -1,6 +1,6 @@
 import scrapy
 import json
-
+from datetime import datetime as dt
 
 def parse_json_response(response):
     # convert repsonse to json
@@ -64,4 +64,4 @@ class ProductsSpider(scrapy.Spider):
             with open(filename, 'wb') as f:
                 f.write(response.body)
 
-            yield dict(title=title, pageTitle=page_title, url=response.url)
+            yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)
