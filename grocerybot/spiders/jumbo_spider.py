@@ -5,7 +5,7 @@ class ProductsSpider(scrapy.Spider):
     name = 'jumbo_products'
 
     custom_settings = {
-        'DOWNLOAD_DELAY': 0.5
+        'DOWNLOAD_DELAY': 0.1
     }
 
     start_urls = ['https://www.jumbo.com/producten/categorieen/aardappel,-rijst,-pasta/',

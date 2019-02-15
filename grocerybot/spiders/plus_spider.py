@@ -8,15 +8,23 @@ class ProductsSpider(scrapy.Spider):
 
     def parse(self, response):
         # follow product categorie pages
-        for href in response.css('li.category-menu__item').css('a::attr(href)'):
+        for href in response.css('li.category-menu__item--sub').css('a::attr(href)'):
             #print(href)
             yield response.follow(href, self.parse_categories)
 
     def parse_categories(self, response):
-        for href in response.css('li.ish-productList-item').css('a::attr(href)'):
-            yield response.follow(href, self.parse_products)
+
+        pages = int(response.css("div.number-items-per-page input").xpath('@value').getall()[0])
+
+        for x in range(0, pages - 1):
+            next = '?PageNumber={page}'.format(page=x)
+            yield response.follow(next, self.parse_products)
 
     def parse_products(self, response):
+        for href in response.css('li.ish-productList-item').css('a::attr(href)'):
+            yield response.follow(href, self.save_product)
+
+    def save_product(self, response):
         page = response.url.split("/")[-1]
         filename = 'data/plus/%s.html' % page
         with open(filename, 'wb') as f:
