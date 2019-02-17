@@ -1,6 +1,9 @@
 import scrapy
 from datetime import datetime as dt
 
+from grocerybot.spiders.models.page_attributes import PageAttributes
+
+
 class ProductsSpider(scrapy.Spider):
     name = 'coop'
     start_urls = ['https://www.coop.nl/boodschappen']
@@ -28,6 +31,5 @@ class ProductsSpider(scrapy.Spider):
         filename = 'data/coop/%s.html' % title
         with open(filename, 'wb') as f:
             f.write(response.body)
-        self.logger.info('Saved file %s' % filename)
 
-        yield dict(title=title, url=response.url, date_crawled=str(dt.now()), filename=filename)
+        yield vars(PageAttributes(response.url, filename, dt.now()))

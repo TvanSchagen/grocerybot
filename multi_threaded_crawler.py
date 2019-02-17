@@ -3,6 +3,7 @@ from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 
+
 def start_crawler(spider_name):
     # load global settings
     # settings = get_project_settings()
