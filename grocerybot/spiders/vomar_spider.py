@@ -1,6 +1,7 @@
 import scrapy
 from datetime import datetime as dt
 
+from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
@@ -40,4 +41,4 @@ class VomarSpider(scrapy.Spider):
         except:
             return
 
-        yield vars(PageAttributes(response.url, filename, dt.now()))
+        yield create_grocery_bot_item(title, response.url, filename, dt.now())

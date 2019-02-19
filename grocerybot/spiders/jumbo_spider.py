@@ -1,6 +1,7 @@
 import scrapy
 from datetime import datetime as dt
 
+from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
@@ -40,8 +41,8 @@ class ProductsSpider(scrapy.Spider):
     def parse_products(self, response):
         page = response.url.split("/")[-3]
         filename = 'data/jumbo/%s.html' % page
-        # title = response.css("div.jum-column-main").css("h1::text").get()
+        title = response.css("div.jum-column-main").css("h1::text").get()
         with open(filename, 'wb') as f:
             f.write(response.body)
 
-        yield vars(PageAttributes(response.url, filename, dt.now()))
+            yield create_grocery_bot_item(title, response.url, filename, dt.now())
