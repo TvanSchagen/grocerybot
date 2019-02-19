@@ -1,33 +1,35 @@
 import scrapy
+from datetime import datetime as dt
+
+from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class ProductsSpider(scrapy.Spider):
     name = 'coop'
     start_urls = ['https://www.coop.nl/boodschappen']
 
-    # start by crawling all pages from the start url, detect categories (that lead to overview pages) and parse them
     def parse(self, response):
         self.logger.info('main: %s' % response.url)
         for href in response.css('li.categoryItem').css('a::attr(href)'):
-            yield response.follow(href, self.parse_overview_pages)
+            yield response.follow(href, self.parse_categories)
 
-    # then parse the overview pages that follow from categories, and overview pages that follow from pagination within categories
-    def parse_overview_pages(self, response):
+    def parse_categories(self, response):
+        pages = int(response.css('div.gi section').xpath('@data-pagecount').getall()[0])
+
+        for page in range(0, pages - 1):
+            next = '?PageNumber={page}'.format(page=page)
+            yield response.follow(next, self.pagination)
+
+    def pagination(self, response):
         self.logger.info('cat: %s' % response.url)
-        # detect individual product pages and parse them
         for href in response.css('div.formfields').css('a::attr(href)'):
-            yield response.follow(href, self.parse_products)
-        # detect pagination links and parse them
-        for href in response.css('li.pagination__listItem').css('a::attr(href)'):
-            yield response.follow(href, self.parse_overview_pages)
+            yield response.follow(href, self.save_product)
 
-    # parse products and write each product to a file
-    def parse_products(self, response):
+    def save_product(self, response):
         self.logger.info('product: %s' % response.url)
-        # extract the title from the product
         title = response.css('h1.head1::text').get()
-        # save the HTML with the extracted title
         filename = 'data/coop/%s.html' % title
         with open(filename, 'wb') as f:
             f.write(response.body)
-        self.logger.info('Saved file %s' % filename)
+
+        yield vars(PageAttributes(response.url, filename, dt.now()))

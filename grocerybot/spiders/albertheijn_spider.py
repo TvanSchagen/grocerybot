@@ -1,5 +1,8 @@
 import scrapy
 import json
+from datetime import datetime as dt
+
+from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 def parse_json_response(response):
@@ -51,7 +54,7 @@ class ProductsSpider(scrapy.Spider):
 
     def parse_products(self, response):
         json_res = parse_json_response(response)
-        page_title = json_res['title']
+        # page_title = json_res['title']
         json_res = json_res[u'_embedded'][u'lanes']
 
         # Get the ProductDetailLane
@@ -64,4 +67,4 @@ class ProductsSpider(scrapy.Spider):
             with open(filename, 'wb') as f:
                 f.write(response.body)
 
-            yield dict(title=title, pageTitle=page_title, url=response.url)
+            yield vars(PageAttributes(response.url, filename, dt.now()))

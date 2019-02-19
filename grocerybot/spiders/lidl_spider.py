@@ -1,4 +1,7 @@
 import scrapy
+from datetime import datetime as dt
+
+from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class LidlSpider(scrapy.Spider):
@@ -32,14 +35,15 @@ class LidlSpider(scrapy.Spider):
 
     def parse_product(self, response):
         title = response.css('h1.attributebox__headline--h1::text').get()
-        page_title = response.css('title::text').get()
+        # page_title = response.css('title::text').get()
 
         filename = 'data/lidl/lidl-%s.html' % title
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log('Saved file %s' % filename)
 
-        yield dict(title=title, pageTitle=page_title, url=response.url)
+        yield vars(PageAttributes(response.url, filename, dt.now()))
 
         for a in response.css('div.product.product--tile a.product__body::attr(href)').getall():
             yield response.follow(a, callback=self.parse_product)
+

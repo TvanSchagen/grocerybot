@@ -1,4 +1,7 @@
 import scrapy
+from datetime import datetime as dt
+
+from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class VomarSpider(scrapy.Spider):
@@ -26,8 +29,8 @@ class VomarSpider(scrapy.Spider):
 
     def parse_product(self, response):
         title = response.css('div.container div.container h1::text').get()
-        page_title = response.css('title::text').get()
-        page_title = page_title.replace('/', '')
+        # page_title = response.css('title::text').get()
+        # page_title = page_title.replace('/', '')
         # page_title = page_title.replace('_', '')
 
         filename = 'data/vomar/vomar-%s.html' % title
@@ -37,4 +40,4 @@ class VomarSpider(scrapy.Spider):
         except:
             return
 
-        yield dict(title=title, pageTitle=page_title, url=response.url)
+        yield vars(PageAttributes(response.url, filename, dt.now()))

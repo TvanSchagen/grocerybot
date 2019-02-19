@@ -1,11 +1,14 @@
 import scrapy
+from datetime import datetime as dt
+
+from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class ProductsSpider(scrapy.Spider):
     name = 'jumbo_products'
 
     custom_settings = {
-        'DOWNLOAD_DELAY': 0.5
+        'DOWNLOAD_DELAY': 0.1
     }
 
     start_urls = ['https://www.jumbo.com/producten/categorieen/aardappel,-rijst,-pasta/',
@@ -23,10 +26,10 @@ class ProductsSpider(scrapy.Spider):
                   ]
 
     def parse(self, response):
-        #get number of pages
+        # get number of pages
         pages = int(response.css('div.ws-product-listing-pagination').xpath('@data-jum-pagecount').getall()[0])
 
-        for page in range(0, pages-1):
+        for page in range(0, pages - 1):
             next = '?PageNumber={page}'.format(page=page)
             yield response.follow(next, self.pagination)
 
@@ -37,6 +40,8 @@ class ProductsSpider(scrapy.Spider):
     def parse_products(self, response):
         page = response.url.split("/")[-3]
         filename = 'data/jumbo/%s.html' % page
+        # title = response.css("div.jum-column-main").css("h1::text").get()
         with open(filename, 'wb') as f:
             f.write(response.body)
-        self.log('Saved file %s' % filename)
+
+        yield vars(PageAttributes(response.url, filename, dt.now()))
