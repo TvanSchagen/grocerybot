@@ -55,17 +55,23 @@ class ProductsSpider(scrapy.Spider):
 
     def parse_products(self, response):
         json_res = parse_json_response(response)
-        # page_title = json_res['title']
+        page_title = json_res['title']
         json_res = json_res[u'_embedded'][u'lanes']
 
         # Get the ProductDetailLane
         product_lane = next(lane for lane in json_res if lane['type'] == 'ProductDetailLane')
         product_details = product_lane['_embedded']['items'][0]
         if product_details:
-            title = product_details['_embedded']['product']['description']
+            product_name = product_details['_embedded']['product']['description']
+            description = product_details['_embedded']['product']['details']['summary']
+            description = description.replace('[list]', '')
+            description = description.replace('[*]', '')
+            weight = product_details['_embedded']['product']['unitSize']
+            price = product_details['_embedded']['product']['priceLabel']['now']
 
-            filename = f'data/ah/{title}.html'
-            with open(filename, 'wb') as f:
-                f.write(response.body)
+            # filename = f'data/ah/{title}.html'
+            # with open(filename, 'wb') as f:
+            #     f.write(response.body)
 
-            yield create_grocery_bot_item(title, response.url, filename, dt.now())
+            yield create_grocery_bot_item(product_name, page_title, description,
+                                          'albert heijn ah', response.url, dt.now(), weight, '', '', price)
