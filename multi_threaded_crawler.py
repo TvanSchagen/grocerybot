@@ -22,7 +22,7 @@ def start_crawler(spider_name):
 if __name__ == "__main__":
     Process(target=start_crawler, args=('ah',)).start()
     Process(target=start_crawler, args=('vomar',)).start()
-    Process(target=start_crawler, args=('lidl',)).start()
+    # Process(target=start_crawler, args=('lidl',)).start()
     Process(target=start_crawler, args=('coop',)).start()
     Process(target=start_crawler, args=('jumbo_products',)).start()
     Process(target=start_crawler, args=('plus_products',)).start()
