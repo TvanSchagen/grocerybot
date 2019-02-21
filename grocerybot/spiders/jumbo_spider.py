@@ -45,8 +45,14 @@ class ProductsSpider(scrapy.Spider):
         # only extract the description when the p is an immediate child of dd.active, otherwise it's not a description
         description = response.css('div.jum-summary-description p::text').get()
 
-        weight = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
-        size = None
+        number_of_units = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
+
+        if " g" in number_of_units:
+            weight = number_of_units
+            size = None
+        else:
+            size = number_of_units
+            weight = None
 
         # nothing
         category = None
@@ -54,7 +60,7 @@ class ProductsSpider(scrapy.Spider):
         # get both parts of the price
         price_euro = response.css('span.jum-price-format::text').getall()[0]
         price_cent = response.css('span.jum-price-format::text').get()
-        price = price_euro+price_cent
+        price = price_euro+'.'+price_cent
 
         price_per_unit = response.css('span.jum-price-format::text').getall()[1]
 

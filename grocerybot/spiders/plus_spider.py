@@ -29,12 +29,32 @@ class ProductsSpider(scrapy.Spider):
             yield response.follow(href, self.save_product)
 
     def save_product(self, response):
-        page = response.url.split("/")[-1]
-        filename = 'data/plus/%s.html' % page
+        product_name = response.css('div.pdp-right-block h1::text').get()
+        page_title = response.css("title::text").get()
 
-        title = response.css('div.pdp-right-block h1::text').get()
+        description = None
 
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+        number_of_units = response.css('div.product-detail-packing::text').get()
 
-        yield create_grocery_bot_item(title, response.url, filename, dt.now())
+        if ' \n' in number_of_units:
+            number_of_units = number_of_units.strip(' \n')
+
+        if 'stuks' in number_of_units:
+            size = number_of_units
+            weight = None
+        else:
+            weight = number_of_units
+            size = None
+
+        try:
+            euros = response.css('span.price span::text').getall()[-1]
+            cents = response.css('span.price sup::text').get()
+            price = euros + '.' + cents
+        except:
+            print("COULD NOT GET TRUE PRICE")
+            price = response.css('span.price span::text').get()
+
+        category = response.css("li.page-header__breadcrumb").css("a::text").getall()
+
+        yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight,
+                                      size, category, price)
