@@ -2,7 +2,8 @@ import json
 import os
 import sys
 from datetime import datetime
-from elasticsearch_dsl import Document, Date, Integer, Keyword, Text, connections, Float
+
+from elasticsearch_dsl import Document, Date, Text, connections, Float
 
 # Define a default Elasticsearch client
 connections.create_connection(hosts=['localhost'])
@@ -22,6 +23,45 @@ class Product(Document):
 
     class Index:
         name = 'product'
+        settings = {
+            "analysis": {
+                "filter": {
+                    "dutch_stop": {
+                        "type": "stop",
+                        "stopwords": "_dutch_"
+                    },
+                    "dutch_keywords": {
+                        "type": "keyword_marker",
+                        "keywords": ["voorbeeld"]
+                    },
+                    "dutch_stemmer": {
+                        "type": "stemmer",
+                        "language": "dutch"
+                    },
+                    "dutch_override": {
+                        "type": "stemmer_override",
+                        "rules": [
+                            "fiets=>fiets",
+                            "bromfiets=>bromfiets",
+                            "ei=>eier",
+                            "kind=>kinder"
+                        ]
+                    }
+                },
+                "analyzer": {
+                    "rebuilt_dutch": {
+                        "tokenizer": "standard",
+                        "filter": [
+                            "lowercase",
+                            "dutch_stop",
+                            "dutch_keywords",
+                            "dutch_override",
+                            "dutch_stemmer"
+                        ]
+                    }
+                }
+            }
+        }
 
     def save(self, **kwargs):
         return super(Product, self).save(**kwargs)
