@@ -33,8 +33,13 @@ class VomarSpider(scrapy.Spider):
         page_title = response.css('title::text').get()
         page_title = page_title.replace('/', '')
         page_title = page_title.replace('_', '')
-        description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[0].get()
-        weight = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[1].get()
+        # get the h5 headers that contain the information we need to extract
+        headers = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('h5::text').getall()
+        desc_index = headers.index(next(header for header in headers if header == 'Beschrijving'))
+        weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
+
+        description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[desc_index].get()
+        weight = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[weight_index].get()
         weight = weight.strip()
         category = ' '.join(response.css('ol.breadcrumb li ::text').getall())
         price = ''.join(response.css('div.priceUnitQuantity div.price span::text').getall())
