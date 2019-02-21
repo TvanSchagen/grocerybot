@@ -39,10 +39,24 @@ class ProductsSpider(scrapy.Spider):
             yield response.follow(href, self.parse_products)
 
     def parse_products(self, response):
-        page = response.url.split("/")[-3]
-        filename = 'data/jumbo/%s.html' % page
-        title = response.css("div.jum-column-main").css("h1::text").get()
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+        product_name = response.css("div.jum-column-main").css("h1::text").get()
+        page_title = response.css('title::text').get()
 
-            yield create_grocery_bot_item(title, response.url, filename, dt.now())
+        # only extract the description when the p is an immediate child of dd.active, otherwise it's not a description
+        description = response.css('div.jum-summary-description p::text').get()
+
+        weight = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
+        size = None
+
+        # nothing
+        category = None
+
+        # get both parts of the price
+        price_euro = response.css('span.jum-price-format::text').getall()[0]
+        price_cent = response.css('span.jum-price-format::text').get()
+        price = price_euro+price_cent
+
+        price_per_unit = response.css('span.jum-price-format::text').getall()[1]
+
+        yield create_grocery_bot_item(product_name, page_title, description, 'jumbo', response.url, dt.now(), weight,
+                                      size, category, price)

@@ -43,9 +43,9 @@ class ProductsSpider(scrapy.Spider):
         # get both parts of the price
         price = response.css('ins.price::text').get() + response.css('ins.price span.sup::text').get() 
 
-        with open('coop-' + (time.strftime("%d%m%Y")) + '.txt', 'a+') as f:
-            f.write(response.url + '\n')
-            print(f.read())
-            f.close()
+        #with open('coop-' + (time.strftime("%d%m%Y")) + '.txt', 'a+') as f:
+        #    f.write(response.url + '\n')
+        #    print(f.read())
+        #    f.close()
 
         yield create_grocery_bot_item(product_name, page_title, description, 'coop', response.url, dt.now(), weight, size, category, price)
