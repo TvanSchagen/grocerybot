@@ -10,15 +10,15 @@ connections.create_connection(hosts=['localhost'])
 
 
 class Product(Document):
-    product_name = Text()
-    page_title = Text()
-    description = Text()
+    product_name = Text(analyzer="rebuilt_dutch")
+    page_title = Text(analyzer="rebuilt_dutch")
+    description = Text(analyzer="rebuilt_dutch")
     supermarket = Text()
     url = Text()
     date = Date()
     weight = Text()
     size = Text()
-    category = Text()
+    category = Text(analyzer="rebuilt_dutch")
     price = Float()
 
     class Index:
