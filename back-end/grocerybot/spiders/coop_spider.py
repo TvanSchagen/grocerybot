@@ -40,8 +40,8 @@ class ProductsSpider(scrapy.Spider):
         size = response.css('header.gi h2.subHead::text').get()
         # grab the n-2 th element of the item/category breadcrumb
         category = response.css('ol.cf span::text')[-2].get()
-        # get both parts of the price
-        price = response.css('ins.price::text').get() + response.css('ins.price span.sup::text').get() 
+        # get both parts of the price (replace comma's by dots to make for easy float parsing)
+        price = str(response.css('ins.price::text').get() + response.css('ins.price span.sup::text').get()).replace(',', '.')
 
         #with open('coop-' + (time.strftime("%d%m%Y")) + '.txt', 'a+') as f:
         #    f.write(response.url + '\n')

@@ -67,12 +67,11 @@ class Product(Document):
         return datetime.now() > self.date
 
 def start_indexer(output_file_name):
+    # connect to es instance
     connections.create_connection(hosts=['localhost'])
     # create the mappings in elasticsearch
     Product.init()
 
-    # get the filename from the command line args
-    # remember: sys.argv[0] is always the current file.
     filename = output_file_name
     if os.path.isfile(filename):
         # load json array
@@ -92,16 +91,16 @@ def start_indexer(output_file_name):
                                 category=product_json['category'],
                                 price=product_json['price'])
             product.save()
+            print("saved " + product_json['url'])
 
-        print('Successfully saved data from: ' + filename)
+        print('successfully saved data from: ' + filename)
     else:
-        print('File not found: ' + filename)
+        print('file not found: ' + filename)
 
 
 if __name__ == "__main__":
     Process(target=start_indexer, args=('ah.json',)).start()
     Process(target=start_indexer, args=('vomar.json',)).start()
-    # Process(target=start_crawler, args=('lidl',)).start()
     Process(target=start_indexer, args=('coop.json',)).start()
-    # Process(target=start_indexer, args=('jumbo_products.json',)).start()
+    Process(target=start_indexer, args=('jumbo_products.json',)).start()
     Process(target=start_indexer, args=('plus_products.json',)).start()
