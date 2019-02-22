@@ -55,9 +55,9 @@ class ProductsSpider(scrapy.Spider):
             price = response.css('span.price span::text').get()
 
         try:
-            category = response.css("li.page-header__breadcrumb").css("a::text").getall()[-1]
+            category = response.css("li.page-header__breadcrumb").css("a::text").getall()[:2]
         except:
-            category= None
+            category = None
             print("Could not find category")
 
         yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight,
