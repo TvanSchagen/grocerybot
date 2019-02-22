@@ -5,12 +5,6 @@ from scrapy.utils.log import configure_logging
 
 
 def start_crawler(spider_name):
-    # load global settings
-    # settings = get_project_settings()
-
-    # create a spider loader that gets all the spiders in our project
-    # spider_loader = spiderloader.SpiderLoader.from_settings(settings)
-
     # load logging settings
     configure_logging()
     # create a CrawlerProcess that starts a Twisted reactor to asyncronously execute the crawlers
