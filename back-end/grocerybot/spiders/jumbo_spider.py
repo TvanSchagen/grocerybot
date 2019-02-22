@@ -8,10 +8,6 @@ from grocerybot.spiders.models.page_attributes import PageAttributes
 class ProductsSpider(scrapy.Spider):
     name = 'jumbo_products'
 
-    custom_settings = {
-        'DOWNLOAD_DELAY': 0.1
-    }
-
     start_urls = ['https://www.jumbo.com/producten/categorieen/aardappel,-rijst,-pasta/',
                   'https://www.jumbo.com/producten/categorieen/vlees,-vis,-vegetarisch/',
                   'https://www.jumbo.com/producten/categorieen/groente/',
@@ -47,11 +43,15 @@ class ProductsSpider(scrapy.Spider):
 
         number_of_units = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
 
-        if " g" in number_of_units:
-            weight = number_of_units
-            size = None
+        if number_of_units is not None:
+            if " g" in number_of_units:
+                weight = number_of_units
+                size = None
+            else:
+                size = number_of_units
+                weight = None
         else:
-            size = number_of_units
+            size = None
             weight = None
 
         # nothing

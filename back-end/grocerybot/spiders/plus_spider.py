@@ -54,7 +54,11 @@ class ProductsSpider(scrapy.Spider):
             print("COULD NOT GET TRUE PRICE")
             price = response.css('span.price span::text').get()
 
-        category = response.css("li.page-header__breadcrumb").css("a::text").getall()
+        try:
+            category = response.css("li.page-header__breadcrumb").css("a::text").getall()[:2]
+        except:
+            category = None
+            print("Could not find category")
 
         yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight,
                                       size, category, price)
