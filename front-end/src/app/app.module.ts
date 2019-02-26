@@ -1,3 +1,4 @@
+import { HighlightSearch } from './pipes/HighlightSearchPipe';
 import { SearchService } from './search/shared/search.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     SearchResultsComponent,
-    SearchComponent
+    SearchComponent,
+    HighlightSearch
   ],
   imports: [
     BrowserModule,
