@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService } from '../search/shared/search.service';
 import { Product } from '../models/product';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-search-results',
@@ -13,15 +14,22 @@ export class SearchResultsComponent implements OnInit {
 
   constructor(
     private _searchService: SearchService,
+    private _route: ActivatedRoute,
+    private _router: Router
   ) { }
 
   ngOnInit() {
     this.searchQuery = this._searchService.getSearchQuery();
-
+    if (!this.searchQuery) {
+      this._route.paramMap.subscribe(params => {
+        this.searchQuery = params.get('query');
+      })
+    }
     this.searchByQuery(this.searchQuery);
   }
 
   searchClicked() {
+    this._router.navigate(['search-results', this.searchQuery]);
     this.searchByQuery(this.searchQuery);
   }
 

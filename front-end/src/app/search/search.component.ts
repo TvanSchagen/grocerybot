@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
 
   searchClicked() {
     this._searchService.setSearchQuery(this.searchQuery);
-    this._router.navigate(['/search-results']);
+    this._router.navigate(['/search-results', this.searchQuery]);
   }
 
 }

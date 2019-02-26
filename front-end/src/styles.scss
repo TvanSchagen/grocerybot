@@ -1,10 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 html {
-    background-color: #fafafa;
+  background-color: #fafafa;
 }
 
 span.highlighted {
-    background: yellow;
+  background: yellow;
+}
+
+body {
+  width: 80%;
+  margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    width: 95%;
+  }
 }
