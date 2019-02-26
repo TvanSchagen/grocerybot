@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+import datetime
 from multiprocessing import Process
 from elasticsearch_dsl import connections
 from grocerybot.indexers.product_indexer import Product
@@ -7,12 +9,16 @@ from grocerybot.indexers.product_indexer import Product
 
 def start_indexer(output_file_name):
     # connect to es instance
-    connections.create_connection(hosts=['localhost'])
-    # create the mappings in elasticsearch
-    Product.init()
+    es = connections.create_connection(hosts=['localhost'])
+
+    # check if index already exists
+    if not es.indices.exists(index="product"):
+        # create the mappings in elasticsearch
+        Product.init()
 
     filename = output_file_name
     if os.path.isfile(filename):
+        print("file found, opening " + filename)
         # load json array
         input_file = open(filename)
         json_array = json.load(input_file)
@@ -38,8 +44,19 @@ def start_indexer(output_file_name):
 
 
 if __name__ == "__main__":
-    Process(target=start_indexer, args=('ah.json',)).start()
-    Process(target=start_indexer, args=('vomar.json',)).start()
-    Process(target=start_indexer, args=('coop.json',)).start()
-    Process(target=start_indexer, args=('jumbo_products.json',)).start()
-    Process(target=start_indexer, args=('plus_products.json',)).start()
+    # if user did not specify date, take todays date
+    if (len(sys.argv) < 2):
+        now = datetime.datetime.now()
+        append = (str(now.day) + "-" + str(now.month) + "-" + str(now.year))
+        print("checking for date " + str(append))
+    else:
+        # else, take the users input
+        append = sys.argv[1]
+        print("checking for date " + str(sys.argv[1]))
+    
+    # start building the index in parallel
+    Process(target=start_indexer, args=(append + '_ah.json',)).start()
+    Process(target=start_indexer, args=(append + '_vomar.json',)).start()
+    Process(target=start_indexer, args=(append + '_coop.json',)).start()
+    Process(target=start_indexer, args=(append + '_jumbo_products.json',)).start()
+    Process(target=start_indexer, args=(append + '_plus_products.json',)).start()
