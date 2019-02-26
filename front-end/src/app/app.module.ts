@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MatButtonModule, MatInputModule, MatIconModule, MatIcon } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatIconModule, MatIcon, MatCardModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SearchComponent } from './search/search.component';
@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatCardModule,
     FormsModule
   ],
   providers: [

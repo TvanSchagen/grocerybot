@@ -11,13 +11,14 @@ import { map } from 'rxjs/operators';
 export class SearchService {
 
   baseUrl = this._config.baseUrl + '/_search';
+  searchQuery: string;
 
   constructor(
     private _http: HttpClient,
     @Inject(APP_CONFIG) private _config
   ) { }
 
-  searchByQuery(searchQuery: string): Observable<Product[]> {
+  searchByQuery(searchQuery: string): Observable<any> {
     const params = new HttpParams().set('q', searchQuery);
 
     return this._http
@@ -27,6 +28,14 @@ export class SearchService {
           response
         )
       );
+  }
+
+  public setSearchQuery(searchQuery: string) {
+    this.searchQuery = searchQuery;
+  }
+
+  public getSearchQuery() {
+    return this.searchQuery;
   }
 
 }

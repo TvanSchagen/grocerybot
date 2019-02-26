@@ -1,3 +1,27 @@
-<p>
-  search-results works!
-</p>
+<div class="row" class="mat-typography">
+  <form class="example-form">
+
+    <mat-form-field>
+      <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="searchClicked()">Grocerybot Search
+    </button>
+  </form>
+</div>
+
+<div class="row">
+  <ul class="card">
+    <li *ngFor="let product of searchResults">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title><strong>{{product._source.product_name}} - {{product._source.supermarket}}</strong></mat-card-title>
+          <mat-card-subtitle>{{product._source.price}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{product._source.page_title}}</p>
+        </mat-card-content>
+      </mat-card>
+    </li>
+  </ul>
+</div>
