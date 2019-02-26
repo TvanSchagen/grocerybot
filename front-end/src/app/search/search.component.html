@@ -1,0 +1,17 @@
+<div style="text-align:center" class="mat-typography">
+  <h1>
+    Welcome to Grocerybot!
+  </h1>
+  <form class="example-form">
+
+    <mat-form-field>
+      <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here" >
+      <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button> -->
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="" [routerLink]="['/search-results']">Grocerybot Search
+    </button>
+  </form>
+</div>
