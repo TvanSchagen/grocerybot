@@ -15,7 +15,7 @@
     <li *ngFor="let product of searchResults">
       <mat-card>
         <div class="header">
-          <a [href]="product._source.url" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
+          <a [href]="product._source.url" target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
         </div>
         <mat-card-header>
           <!-- <mat-card-title><strong>{{product._source.product_name}} - {{product._source.supermarket}}</strong></mat-card-title> -->
