@@ -24,7 +24,7 @@ export class SearchResultsComponent implements OnInit {
     if (!this.searchQuery) {
       this._route.paramMap.subscribe(params => {
         this.searchQuery = params.get('query');
-      })
+      });
     }
     this.searchByQuery(this.searchQuery);
   }
@@ -35,7 +35,13 @@ export class SearchResultsComponent implements OnInit {
   }
 
   productClicked(url) {
-    window.open(url)
+    // modify the url if it's from albert heijn
+    if (url.includes('ah.nl')) {
+      const productUrl = url.split('url=')[1];
+      url = 'http://ah.nl' + productUrl;
+    }
+
+    window.open(url);
   }
 
   searchByQuery(query: string) {
