@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class SearchResultsComponent implements OnInit {
   searchQuery: string;
   searchResults: Product[] = [];
+  viewMode: boolean = false;
 
   constructor(
     private _searchService: SearchService,
@@ -31,6 +32,10 @@ export class SearchResultsComponent implements OnInit {
   searchClicked() {
     this._router.navigate(['search-results', this.searchQuery]);
     this.searchByQuery(this.searchQuery);
+  }
+
+  productClicked(url) {
+    window.open(url)
   }
 
   searchByQuery(query: string) {

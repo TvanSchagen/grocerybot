@@ -1,30 +1,42 @@
-<div class="row mat-typography">
-  <form class="example-form">
+<div class="row mat-typography header-bar">
+    <div style="text-align:center" class="mat-typography title">
+        <a [routerLink]="['/']"><h1>Grocerybot</h1></a>
+    </div>
+  <form class="example-form header-inner">
 
-    <mat-form-field>
+    <mat-form-field class="search-bar">
       <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here">
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="searchClicked()">Grocerybot Search
-    </button>
+    <button class="search-button" mat-raised-button color="primary" (click)="searchClicked()">Search</button>
+
   </form>
 </div>
 
-<div class="row">
-  <ul class="card">
-    <li *ngFor="let product of searchResults">
-      <mat-card>
-        <div class="header">
-          <a [href]="product._source.url" target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
-        </div>
-        <mat-card-header>
-          <!-- <mat-card-title><strong>{{product._source.product_name}} - {{product._source.supermarket}}</strong></mat-card-title> -->
-          <mat-card-subtitle>{{product._source.price}} - {{product._source.supermarket}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
-        </mat-card-content>
-      </mat-card>
-    </li>
-  </ul>
+<div class="main-content">
+
+  <mat-select placeholder="View Mode" [(ngModel)]='viewMode' class="hide-under-600px">
+    <mat-option [value]="false">Regular Mode</mat-option>
+    <mat-option [value]="true">Compact Mode</mat-option>
+  </mat-select>
+  
+  <div class="row">
+    <ul class="card">
+      <li *ngFor="let product of searchResults" [className]="viewMode == true ? 'comp-mode' : 'reg-mode'">
+        <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
+          <div class="header">
+            <a target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
+          </div>
+          <mat-card-header>
+            <!-- <mat-card-title><strong>{{product._source.product_name}} - {{product._source.supermarket}}</strong></mat-card-title> -->
+            <mat-card-subtitle>{{product._source.price}} - {{product._source.supermarket}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="last-child">
+            <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
+          </mat-card-content>
+        </mat-card>
+      </li>
+    </ul>
+  </div>
+  
 </div>

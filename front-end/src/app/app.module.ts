@@ -1,18 +1,24 @@
-import { HighlightSearch } from './pipes/HighlightSearchPipe';
-import { SearchService } from './search/shared/search.service';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { HighlightSearch } from "./pipes/HighlightSearchPipe";
+import { SearchService } from "./search/shared/search.service";
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MatButtonModule, MatInputModule, MatIconModule, MatIcon, MatCardModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SearchResultsComponent } from './search-results/search-results.component';
-import { SearchComponent } from './search/search.component';
-import { FormsModule } from '@angular/forms';
-import { APP_CONFIG, AppConfig } from './app.config';
-import { HttpClientModule } from '@angular/common/http';
-
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatIconModule,
+  MatRippleModule,
+  MatCardModule,
+  MatSelectModule
+} from "@angular/material";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SearchResultsComponent } from "./search-results/search-results.component";
+import { SearchComponent } from "./search/search.component";
+import { FormsModule } from "@angular/forms";
+import { APP_CONFIG, AppConfig } from "./app.config";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -30,12 +36,11 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     MatIconModule,
     MatCardModule,
+    MatRippleModule,
+    MatSelectModule,
     FormsModule
   ],
-  providers: [
-    SearchService,
-    {provide: APP_CONFIG, useValue: AppConfig},
-  ],
+  providers: [SearchService, { provide: APP_CONFIG, useValue: AppConfig }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

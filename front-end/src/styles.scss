@@ -5,17 +5,39 @@ html {
   background-color: #fafafa;
 }
 
+body {
+  margin: 0;
+}
+
 span.highlighted {
   background: yellow;
 }
 
-body {
+.main-content {
+  width: 80%;
+  margin: auto;
+  margin-top: 150px;
+}
+
+.header-inner {
   width: 80%;
   margin: auto;
 }
 
 @media only screen and (max-width: 600px) {
-  body {
+  .main-content {
     width: 95%;
   }
+
+  .hide-under-600px {
+    display: none !important;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.no-text-select {
+  user-select: none;
 }

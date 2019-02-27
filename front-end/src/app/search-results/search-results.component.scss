@@ -1,16 +1,54 @@
+.header-bar {
+    background-color: white;
+    box-shadow: 3px 3px 5px 6px #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    top: 0;
+}
+
+.title {
+    float: left;
+}
+
+.search-bar {
+    width: calc(100% - 6em);
+}
+
+.search-button {
+    width: 6em;
+}
+
 div.row {
-    text-align: center
+  text-align: center;
 }
 
 .card {
-    list-style-type: none;
-    padding-left: 0;
+  list-style-type: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .card li {
-    margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .header {
-    text-align: left;
+  text-align: left;
+}
+
+.mat-card .last-child {
+  margin-bottom: 0;
+}
+
+.comp-mode {
+    min-width: 150px;
+    max-width: 250px;
+}
+
+.reg-mode {
+    width: 100%;
 }
