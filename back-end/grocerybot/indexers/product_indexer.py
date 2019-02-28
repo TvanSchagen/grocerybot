@@ -3,14 +3,16 @@ import os
 import sys
 from datetime import datetime
 
-from elasticsearch_dsl import Document, Date, Text, connections, Float
+from elasticsearch_dsl import Document, Date, Text, connections, Float, Completion
 
 # Define a default Elasticsearch client
 connections.create_connection(hosts=['localhost'])
 
 
 class Product(Document):
-    product_name = Text(analyzer="rebuilt_dutch")
+    product_name = Text(analyzer="rebuilt_dutch" )
+    #suggest = Completion(analyzer="rebuilt_dutch_autocomp")
+    suggest = Completion()
     page_title = Text(analyzer="rebuilt_dutch")
     description = Text(analyzer="rebuilt_dutch")
     supermarket = Text()
@@ -46,9 +48,26 @@ class Product(Document):
                             "ei=>eier",
                             "kind=>kinder"
                         ]
+                    },
+                    "autocomplete_filter":{
+                        "type":"edge_ngram",
+                        "min_gram": 1,
+                        "max_gram": 4
                     }
                 },
                 "analyzer": {
+                    "rebuilt_dutch_autocomp": {
+                        "tokenizer": "standard",
+                        "type": "custom",
+                        "filter": [
+                            "lowercase",
+                            "autocomplete_filter",
+                            "dutch_stop",
+                            "dutch_keywords",
+                            "dutch_override",
+                            "dutch_stemmer"
+                        ]
+                    },
                     "rebuilt_dutch": {
                         "tokenizer": "standard",
                         "filter": [
@@ -86,6 +105,7 @@ if __name__ == '__main__':
             for product_json in json_array:
                 # create and save the product
                 product = Product(product_name=product_json['product_name'],
+                                  suggest=product_json['product_name'],
                                   page_title=product_json['page_title'],
                                   description=product_json['description'],
                                   supermarket=product_json['supermarket'],
