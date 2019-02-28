@@ -6,16 +6,18 @@ from multiprocessing import Process
 from elasticsearch_dsl import connections
 from grocerybot.indexers.product_indexer import Product
 
-
-def start_indexer(output_file_name):
-    # connect to es instance
+def check_create_index():
+    # establish connection
     es = connections.create_connection(hosts=['localhost'])
-
     # check if index already exists
     if not es.indices.exists(index="product"):
         # create the mappings in elasticsearch
         Product.init()
+        print("created index")
+    else:
+        print("index already exists")
 
+def start_indexer(output_file_name):
     filename = output_file_name
     if os.path.isfile(filename):
         print("file found, opening " + filename)
@@ -36,7 +38,6 @@ def start_indexer(output_file_name):
                               category=product_json['category'],
                               price=product_json['price'])
             product.save()
-            print("saved " + product_json['url'])
 
         print('successfully saved data from: ' + filename)
     else:
@@ -53,10 +54,13 @@ if __name__ == "__main__":
         # else, take the users input
         append = sys.argv[1]
         print("checking for date " + str(sys.argv[1]))
+
+    # check if index exists, if not create it
+    check_create_index()
     
     # start building the index in parallel
     Process(target=start_indexer, args=(append + '_ah.json',)).start()
     Process(target=start_indexer, args=(append + '_vomar.json',)).start()
     Process(target=start_indexer, args=(append + '_coop.json',)).start()
-    Process(target=start_indexer, args=(append + '_jumbo_products.json',)).start()
+    # Process(target=start_indexer, args=(append + '_jumbo_products.json',)).start()
     Process(target=start_indexer, args=(append + '_plus_products.json',)).start()
