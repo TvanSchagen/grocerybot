@@ -1,8 +1,8 @@
-import scrapy
 from datetime import datetime as dt
 
+import scrapy
+
 from grocerybot.items import create_grocery_bot_item
-from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class ProductsSpider(scrapy.Spider):
@@ -29,7 +29,8 @@ class ProductsSpider(scrapy.Spider):
             yield response.follow(href, self.save_product)
 
     def save_product(self, response):
-        product_name = response.css('div.pdp-right-block h1::text').get()
+        product_name = response.css("li.page-header__breadcrumb").css("a::text").getall()[-1]
+        # product_name = response.css('div.pdp-right-block h1::text').get()
         page_title = response.css("title::text").get()
 
         description = None

@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class SearchResultsComponent implements OnInit {
   searchQuery: string;
   searchResults: Product[] = [];
-  viewMode: boolean = false;
+  viewMode = false;
 
   constructor(
     private _searchService: SearchService,
