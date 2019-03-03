@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product';
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 import { APP_CONFIG } from 'src/app/app.config';
 import { map } from 'rxjs/operators';
 
@@ -28,6 +28,27 @@ export class SearchService {
           response
         )
       );
+  }
+
+  spellingSuggestionsByQuery(searchQuery: string): Observable<any> {
+    const body = {
+      'suggest': {
+        'suggest' : {
+          'text' : searchQuery,
+          'term' : {
+            'field': 'product_name'
+          }
+        }
+      }
+    }
+
+    return this._http
+      .post(this.baseUrl, body, { headers: new HttpHeaders().set('Content-Type', 'application/json') })
+      .pipe(
+        map((response: any) =>
+          response
+        )
+      )
   }
 
   public setSearchQuery(searchQuery: string) {

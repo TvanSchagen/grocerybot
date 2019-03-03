@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class SearchResultsComponent implements OnInit {
   searchQuery: string;
   searchResults: Product[] = [];
+  spellSuggestions: any;
   viewMode = false;
 
   constructor(
@@ -27,11 +28,18 @@ export class SearchResultsComponent implements OnInit {
       });
     }
     this.searchByQuery(this.searchQuery);
+    this.spellSuggestionsByQuery(this.searchQuery);
   }
 
   searchClicked() {
     this._router.navigate(['search-results', this.searchQuery]);
     this.searchByQuery(this.searchQuery);
+    this.spellSuggestionsByQuery(this.searchQuery);
+  }
+
+  suggestionClicked(searchQuery: string) {
+    this.searchQuery = searchQuery;
+    this.searchClicked();
   }
 
   productClicked(url) {
@@ -51,8 +59,19 @@ export class SearchResultsComponent implements OnInit {
           console.log(data);
           this.searchResults = data.hits.hits;
         },
-        error => console.log(error)
+        error => console.error(error)
       );
+  }
+
+  spellSuggestionsByQuery(query: string) {
+    this._searchService.spellingSuggestionsByQuery(query)
+      .subscribe(
+        data => {
+          console.log(data);
+          this.spellSuggestions = data.suggest.suggest;
+        },
+        error => console.error(error)
+      )
   }
 
 }
