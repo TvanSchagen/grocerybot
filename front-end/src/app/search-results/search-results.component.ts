@@ -72,7 +72,7 @@ export class SearchResultsComponent implements OnInit {
           console.log(data);
           this.searchResults = data.hits.hits;
           this.resultsReturned = data.hits.total;
-          this.resultsLoaded += this._config.defaultResultsLoaded;
+          this.resultsLoaded = this._config.defaultResultsLoaded;
           this.resultsTook = data.took;
         },
         error => console.error(error)
