@@ -38,10 +38,47 @@ div.row {
 
 .header {
   text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-compact {
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  .header-main {
+    width: 100%;
+    order: 3;
+  }
+  .header-aside {
+    width: 50%;
+    height: 2em;
+  }
+}
+
+.header-main {
+  width: 70%;
+}
+
+.header-aside {
+  width: 15%;
+}
+
+a {
+  color: blue;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.product-price {
+  font-weight: bold;
 }
 
 .mat-card .last-child {
   margin-bottom: 0;
+  text-align: left;
 }
 
 .comp-mode {
@@ -51,4 +88,9 @@ div.row {
 
 .reg-mode {
     width: 100%;
+}
+
+.product-url {
+  color: darkgreen;
+  font-size: 85%;
 }

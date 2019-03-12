@@ -15,7 +15,12 @@
 
 <div class="main-content">
 
-  <mat-select placeholder="View Mode" [(ngModel)]='viewMode' class="hide-under-600px">
+
+  <div class="mat-typography">
+    <p>Loaded {{ resultsReturned }} results in {{ resultsTook }} ms</p>
+  </div>
+
+  <mat-select placeholder="View Mode" [(ngModel)]='compactViewMode' class="hide-under-600px">
     <mat-option [value]="false">Regular Mode</mat-option>
     <mat-option [value]="true">Compact Mode</mat-option>
   </mat-select>
@@ -33,21 +38,31 @@
   <div class="row">
 
     <ul class="card">
-      <li *ngFor="let product of searchResults" [className]="viewMode == true ? 'comp-mode' : 'reg-mode'">
+      <li *ngFor="let product of searchResults" [className]="compactViewMode == true ? 'comp-mode' : 'reg-mode'">
         <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
-          <div class="header">
-            <a target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
+          <div [className]="compactViewMode == true ? 'header-compact' : 'header'">
+              <div class="header-aside">
+                  <span>{{product._source.supermarket}}</span>
+              </div>
+            <div class="header-main">
+                <a target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
+                <br><span class="product-url" [innerHtml]="product._source.url"></span>
+                <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
+            </div>
+            <div class="header-aside text-align-right">
+                <span class="product-price">€ {{product._source.price}}</span>
+            </div>
           </div>
-          <mat-card-header>
-            <!-- <mat-card-title><strong>{{product._source.product_name}} - {{product._source.supermarket}}</strong></mat-card-title> -->
-            <mat-card-subtitle>{{product._source.price}} - {{product._source.supermarket}}</mat-card-subtitle>
-          </mat-card-header>
           <mat-card-content class="last-child">
-            <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
+
           </mat-card-content>
         </mat-card>
       </li>
     </ul>
+  </div>
+
+  <div *ngIf="resultsLoaded < resultsReturned">
+    <button (click)="loadMoreClicked()" style="width: 100%; margin-bottom: 5em" mat-button>Load More Results</button>
   </div>
   
 </div>

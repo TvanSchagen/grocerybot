@@ -18,11 +18,17 @@ export class SearchService {
     @Inject(APP_CONFIG) private _config
   ) { }
 
-  searchByQuery(searchQuery: string): Observable<any> {
+  searchByQuery(searchQuery: string, from: number = 0, size: number = this._config.defaultResultsLoaded): Observable<any> {
+    const body = {
+      'from': from, 
+      'size': size
+    }
+
     const params = new HttpParams().set('q', searchQuery);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
 
     return this._http
-      .get(this.baseUrl, { params: params })
+      .post(this.baseUrl, body, { headers: headers, params: params })
       .pipe(
         map((response: any) =>
           response
