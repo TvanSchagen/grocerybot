@@ -3,7 +3,12 @@ import { SearchService } from '../search/shared/search.service';
 import { Product } from '../models/product';
 import { Router, ActivatedRoute } from '@angular/router';
 import { APP_CONFIG } from 'src/app/app.config';
-import { forEach } from '@angular/router/src/utils/collection';
+import { SortMode } from 'src/app/enums/sort-mode';
+
+enum ViewMode {
+  Regular,
+  Compact
+}
 
 @Component({
   selector: 'app-search-results',
@@ -17,10 +22,12 @@ export class SearchResultsComponent implements OnInit {
   searchQuery: string;
   searchResults: Product[] = [];
   spellSuggestions: any;
-  compactViewMode = false;
   resultsReturned: number;
   resultsLoaded : number = 0;
   resultsTook: number;
+
+  sortMode: SortMode = SortMode.Relevance;
+  viewMode: ViewMode = ViewMode.Regular;
 
   constructor(
     private _searchService: SearchService,
@@ -50,6 +57,10 @@ export class SearchResultsComponent implements OnInit {
     this.loadMoreResults(this.searchQuery);
   }
 
+  updateSort() {
+    this.searchByQuery(this.searchQuery);
+  }
+
   suggestionClicked(searchQuery: string) {
     this.searchQuery = searchQuery;
     this.searchClicked();
@@ -66,7 +77,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   searchByQuery(query: string) {
-    this._searchService.searchByQuery(query)
+    this._searchService.searchByQuery(query, this.sortMode)
       .subscribe(
         data => {
           console.log(data);
@@ -91,7 +102,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   loadMoreResults(query: string) {
-    this._searchService.searchByQuery(query, this.resultsLoaded)
+    this._searchService.searchByQuery(query, this.sortMode, this.resultsLoaded)
       .subscribe(
         data => {
           console.log(data);

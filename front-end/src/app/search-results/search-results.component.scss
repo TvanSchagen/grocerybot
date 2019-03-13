@@ -81,6 +81,14 @@ a:hover {
   text-align: left;
 }
 
+.options-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  .options-child {
+    width: 10em;
+  }
+}
+
 .comp-mode {
     min-width: 150px;
     max-width: 250px;

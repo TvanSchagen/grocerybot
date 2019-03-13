@@ -20,15 +20,23 @@
     <p>Loaded {{ resultsReturned }} results in {{ resultsTook }} ms</p>
   </div>
 
-  <mat-select placeholder="View Mode" [(ngModel)]='compactViewMode' class="hide-under-600px">
-    <mat-option [value]="false">Regular Mode</mat-option>
-    <mat-option [value]="true">Compact Mode</mat-option>
-  </mat-select>
+  <div class="options-wrapper" >
 
+    <mat-select placeholder="View Mode" [(ngModel)]='viewMode' class="hide-under-600px options-child">
+      <mat-option [value]="0">Regular Mode</mat-option>
+      <mat-option [value]="1">Compact Mode</mat-option>
+    </mat-select>
+
+    <mat-select placeholder="Sort by" [(ngModel)]='sortMode' (ngModelChange)="updateSort()" class="options-child">
+      <mat-option [value]="0">Sort by Relevance</mat-option>
+      <mat-option [value]="1">Sort by Price</mat-option>
+    </mat-select>
+
+  </div>
   
-  <div class="mat-typography">
+  <div class="mat-typography" *ngIf="resultsReturned < 1">
+    <span>Did you mean</span>
     <div *ngFor="let term of spellSuggestions">
-        <span *ngIf="term.options.length > 0">Did you mean</span>
         <span *ngFor="let suggestion of term.options">
           <button mat-button color="primary" (click)="suggestionClicked(suggestion.text)">{{ suggestion.text }} </button>
         </span>
@@ -38,9 +46,9 @@
   <div class="row">
 
     <ul class="card">
-      <li *ngFor="let product of searchResults" [className]="compactViewMode == true ? 'comp-mode' : 'reg-mode'">
+      <li *ngFor="let product of searchResults" [className]="viewMode == 1 ? 'comp-mode' : 'reg-mode'">
         <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
-          <div [className]="compactViewMode == true ? 'header-compact' : 'header'">
+          <div [className]="viewMode == 1 ? 'header-compact' : 'header'">
               <div class="header-aside">
                   <span>{{product._source.supermarket}}</span>
               </div>
