@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import scrapy
 
 from grocerybot.items import create_grocery_bot_item
+from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
 
 class ProductsSpider(scrapy.Spider):
@@ -44,7 +45,7 @@ class ProductsSpider(scrapy.Spider):
             size = number_of_units
             weight = None
         else:
-            weight = number_of_units
+            weight = WeightStandardizer.standardize(number_of_units)
             size = None
 
         try:

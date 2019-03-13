@@ -4,7 +4,7 @@ from datetime import datetime as dt
 
 from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
-
+from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
 def parse_json_response(response):
     # convert repsonse to json
@@ -66,7 +66,7 @@ class ProductsSpider(scrapy.Spider):
             description = product_details['_embedded']['product']['details']['summary']
             description = description.replace('[list]', '')
             description = description.replace('[*]', '')
-            weight = product_details['_embedded']['product']['unitSize']
+            weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
             price = product_details['_embedded']['product']['priceLabel']['now']
 
             # filename = f'data/ah/{title}.html'

@@ -3,6 +3,7 @@ from datetime import datetime as dt
 
 from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
+from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
 
 class VomarSpider(scrapy.Spider):
@@ -41,6 +42,7 @@ class VomarSpider(scrapy.Spider):
         description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[desc_index].get()
         weight = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[weight_index].get()
         weight = weight.strip()
+        weight = WeightStandardizer.standardize(weight)
         category = ' '.join(response.css('ol.breadcrumb li ::text').getall())
         price = ''.join(response.css('div.priceUnitQuantity div.price span::text').getall())
 

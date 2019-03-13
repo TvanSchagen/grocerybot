@@ -3,6 +3,7 @@ from datetime import datetime as dt
 
 from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
+from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
 
 class ProductsSpider(scrapy.Spider):
@@ -44,8 +45,8 @@ class ProductsSpider(scrapy.Spider):
         number_of_units = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
 
         if number_of_units is not None:
-            if " g" in number_of_units:
-                weight = number_of_units
+            if " g" in number_of_units or " l" in number_of_units or " kg" in number_of_units or " ml" in number_of_units:
+                weight = WeightStandardizer.standardize(number_of_units)
                 size = None
             else:
                 size = number_of_units

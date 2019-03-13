@@ -58,7 +58,10 @@
                 <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
             </div>
             <div class="header-aside text-align-right">
-                <span class="product-price">€ {{product._source.price}}</span>
+              <span> {{ product._source.weight }} </span>
+            </div>
+            <div class="header-aside text-align-right">
+              <span class="product-price">€ {{product._source.price}}</span>
             </div>
           </div>
           <mat-card-content class="last-child">
