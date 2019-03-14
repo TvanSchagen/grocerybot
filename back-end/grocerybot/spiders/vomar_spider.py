@@ -13,10 +13,6 @@ class VomarSpider(scrapy.Spider):
         'https://www.vomar.nl/producten'
     ]
 
-    custom_settings = {
-        'DOWNLOAD_DELAY': 0.5
-    }
-
     def parse(self, response):
         for a in response.css('div.item a::attr(href)').getall():
             yield response.follow(a, callback=self.parse_category)
