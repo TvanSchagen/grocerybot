@@ -42,12 +42,5 @@ class VomarSpider(scrapy.Spider):
         category = ' '.join(response.css('ol.breadcrumb li ::text').getall())
         price = ''.join(response.css('div.priceUnitQuantity div.price span::text').getall())
 
-        # filename = 'data/vomar/vomar-%s.html' % title
-        # try:
-        #     with open(filename, 'wb') as f:
-        #         f.write(response.body)
-        # except:
-        #     return
-
         yield create_grocery_bot_item(title, page_title, description, 'vomar',
                                       response.url, dt.now(), weight, '', category, price)

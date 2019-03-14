@@ -46,7 +46,7 @@ def start_indexer(output_file_name):
 
 if __name__ == "__main__":
     # if user did not specify date, take todays date
-    if (len(sys.argv) < 2):
+    if len(sys.argv) < 2:
         now = datetime.datetime.now()
         append = (str(now.day) + "-" + str(now.month) + "-" + str(now.year))
         print("checking for date " + str(append))
