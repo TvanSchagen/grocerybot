@@ -143,7 +143,7 @@ def update_index(filename):
         for product_json in json_array:
             product = convert_json_to_product(product_json)
             exists = document_exists(product)
-            if exists:
+            if not exists:
                 product.save()
             else:
                 print('Skipping already indexed product: ' + str(product.product_name))
@@ -163,8 +163,6 @@ if __name__ == '__main__':
             create_index(filepath)
         elif operation == 'update':
             update_index(filepath)
-
-
     else:
         print('Args should be given in the format [path of file to index] [create or update].')
 
