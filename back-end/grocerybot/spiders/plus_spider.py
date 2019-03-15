@@ -42,12 +42,19 @@ class ProductsSpider(scrapy.Spider):
         if ' \n' in number_of_units:
             number_of_units = number_of_units.strip(' \n')
 
-        if 'stuks' in number_of_units:
-            size = number_of_units
-            weight = None
+        if number_of_units is not None:        
+            if 'stuks' in number_of_units:
+                size = number_of_units
+                weight_q = None
+                weight_ind = None
+            else:
+                weight_q = WeightStandardizer.standardize_quantity(number_of_units)
+                weight_ind = WeightStandardizer.standardize_indicator(number_of_units)
+                size = None
         else:
-            weight = WeightStandardizer.standardize(number_of_units)
             size = None
+            weight_q = None
+            weight_ind = None
 
         try:
             euros = response.css('span.price span::text').getall()[-1]
@@ -63,5 +70,5 @@ class ProductsSpider(scrapy.Spider):
             category = None
             print("Could not find category")
 
-        yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight,
+        yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight_q, weight_ind,
                                       size, category, price, img_src)

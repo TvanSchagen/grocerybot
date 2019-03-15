@@ -66,12 +66,28 @@ class ProductsSpider(scrapy.Spider):
             description = product_details['_embedded']['product']['details']['summary']
             description = description.replace('[list]', '')
             description = description.replace('[*]', '')
-            weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
+            size_or_weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
+            
+            if size_or_weight is not None:
+                if "stuk" in size_or_weight:
+                    size = size_or_weight
+                    weight_q = None
+                    weight_ind = None
+                else:
+                    size = None
+                    weight_q = WeightStandardizer.standardize_quantity(size_or_weight)
+                    weight_ind = WeightStandardizer.standardize_indicator(size_or_weight)
+            else:
+                size = None
+                weight_q = None
+                weight_ind = None
+
             price = product_details['_embedded']['product']['priceLabel']['now']
+            image = None
 
             # filename = f'data/ah/{title}.html'
             # with open(filename, 'wb') as f:
             #     f.write(response.body)
 
             yield create_grocery_bot_item(product_name, page_title, description,
-                                          'albert heijn ah', response.url, dt.now(), weight, '', '', price)
+                                          'albert heijn ah', response.url, dt.now(), weight_q, weight_ind, size, '', price, image)

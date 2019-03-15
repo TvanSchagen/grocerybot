@@ -39,14 +39,20 @@ class ProductsSpider(scrapy.Spider):
         description = response.css('dl.definitionList dd.active>p::text').get()
         # in coop, weight and size are currently the same 'block'
         weight_or_size = response.css('header.gi h2.subHead::text').get()
-        if "stuk" in weight_or_size:
-            size = weight_or_size
-            weight_q = None
-            weight_ind = None
+        
+        if weight_or_size is not None:
+            if "stuk" in weight_or_size:
+                size = weight_or_size
+                weight_q = None
+                weight_ind = None
+            else:
+                weight_q = WeightStandardizer.standardize_quantity(weight_or_size)
+                weight_ind = WeightStandardizer.standardize_indicator(weight_or_size)
+                size = None
         else:
-             weight_q = WeightStandardizer.standardize_quantity(weight_or_size)
-             weight_ind = WeightStandardizer.standardize_indicator(weight_or_size)
-             size = None
+            size = None
+            weight_q = None
+            weight_ind = None  
 
         image = response.css('div.gi b0_12 img').xpath('@data-srcset').get()
 

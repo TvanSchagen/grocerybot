@@ -37,13 +37,28 @@ class VomarSpider(scrapy.Spider):
         desc_index = headers.index(next(header for header in headers if header == 'Beschrijving'))
         weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
 
-
         description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[desc_index].get()
-        weight = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[weight_index].get()
-        weight = weight.strip()
-        weight = WeightStandardizer.standardize(weight)
+        weight_or_size = response.css('div.unitQuantity span::text').get()
+        weight_or_size = weight_or_size.strip()
+
+        weight_or_size = weight_or_size.replace("Stuks", "").replace("Stuk", "")
+
+        if weight_or_size is not None:
+            if "Per" in weight_or_size:
+                size = weight_or_size
+                weight_q = None
+                weight_ind = None
+            else:
+                weight_q = WeightStandardizer.standardize_quantity(weight_or_size)
+                weight_ind = WeightStandardizer.standardize_indicator(weight_or_size)
+                size = None
+        else:
+            weight_q = None
+            weight_ind = None
+            size = None
+
         category = ' '.join(response.css('ol.breadcrumb li ::text').getall())
         price = ''.join(response.css('div.priceUnitQuantity div.price span::text').getall())
 
         yield create_grocery_bot_item(title, page_title, description, 'vomar',
-                                      response.url, dt.now(), weight, '', category, price,img_src)
+                                      response.url, dt.now(), weight_q, weight_ind, size, category, price, 'www.vomar.nl' + img_src)

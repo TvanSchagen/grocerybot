@@ -48,14 +48,17 @@ class ProductsSpider(scrapy.Spider):
 
         if number_of_units is not None:
             if " g" in number_of_units or " l" in number_of_units or " kg" in number_of_units or " ml" in number_of_units:
-                weight = WeightStandardizer.standardize(number_of_units)
+                weight_q = WeightStandardizer.standardize_quantity(number_of_units)
+                weight_ind = WeightStandardizer.standardize_indicator(number_of_units)
                 size = None
             else:
                 size = number_of_units
-                weight = None
+                weight_q = None
+                weight_ind = None
         else:
             size = None
-            weight = None
+            weight_q = None
+            weight_ind = None
 
         # nothing
         category = None
@@ -67,5 +70,5 @@ class ProductsSpider(scrapy.Spider):
 
         price_per_unit = response.css('span.jum-price-format::text').getall()[1]
 
-        yield create_grocery_bot_item(product_name, page_title, description, 'jumbo', response.url, dt.now(), weight,
+        yield create_grocery_bot_item(product_name, page_title, description, 'jumbo', response.url, dt.now(), weight_q, weight_ind,
                                       size, category, price, image_url)

@@ -26,6 +26,8 @@ class WeightStandardizer:
 
     @staticmethod
     def standardize_quantity(input):
+        if (input == None):
+            return None
         weight = input.replace(" ", "")
         weight = weight.replace(",", ".")
         match = re.search("(\d+(g|ml|l|liter|gram|kilogram|kg))", weight).group()
@@ -38,12 +40,14 @@ class WeightStandardizer:
 
     @staticmethod
     def standardize_indicator(input):
+        if (input == None):
+            return None
         weight = input.replace(" ", "")
         match = re.search("(\d+(g|ml|l|gram|kilogram|kg))", weight).group()
         if (re.match("(\d+(kg|kilogram))", match)):
             indicator = "g"
         elif (re.match("(\d+(l|liter))", match)):
-            inidcator = "ml"
+            indicator = "ml"
         else:
             indicator = re.sub("\d", "", match)
         return indicator
