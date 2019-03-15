@@ -48,10 +48,10 @@ CONCURRENT_REQUESTS_PER_IP = 4
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-    'scrapy_deltafetch.DeltaFetch': 100,
+   # 'scrapy_deltafetch.DeltaFetch': 100,
    # 'grocerybot.middlewares.GrocerybotSpiderMiddleware': 543,
 }
-DELTAFETCH_ENABLED = True
+# DELTAFETCH_ENABLED = True
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html

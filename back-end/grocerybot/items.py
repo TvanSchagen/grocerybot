@@ -8,7 +8,7 @@ import scrapy
 
 def create_grocery_bot_item(
         product_name: string, page_title: string, description: string,
-        supermarket: string, url: string, date: datetime, weight: string,
+        supermarket: string, url: string, date: datetime, weight_q: string, weight_ind: string,
         size: string, category: string, price: string, img_url: string):
     """
     Creates a GrocerybotItem object, assigns it's fields and returns it.
@@ -21,7 +21,8 @@ def create_grocery_bot_item(
     item['supermarket'] = supermarket
     item['url'] = url
     item['date'] = date.strftime("%d-%m-%Y %H:%M:%S")
-    item['weight'] = weight
+    item['weight_q'] = weight_q
+    item['weight_ind'] = weight_ind
     item['size'] = size
     item['category'] = category
     item['price'] = price
@@ -40,8 +41,9 @@ class GrocerybotItem(scrapy.Item):
     supermarket = scrapy.Field()
     url = scrapy.Field()
     date = scrapy.Field()
-    weight = scrapy.Field()
+    weight_q = scrapy.Field()
+    weight_ind = scrapy.Field()
     size = scrapy.Field()
     category = scrapy.Field()
     price = scrapy.Field()
-    img_price = scrapy.Field()
+    img_url = scrapy.Field()

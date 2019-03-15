@@ -19,10 +19,13 @@ class Product(Document):
     supermarket = Text()
     url = Text()
     date = Date()
-    weight = Text()
+    weight_q = Float()
+    weight_ind = Text()
     size = Text()
     category = Text(analyzer="rebuilt_dutch")
     price = Float()
+    image = Text()
+
 
     class Index:
         name = 'product'
@@ -98,10 +101,13 @@ def convert_json_to_product(product_json):
                    supermarket=product_json['supermarket'],
                    url=product_json['url'],
                    date=product_json['date'],
-                   weight=product_json['weight'],
+                   weight_q=product_json['weight_q'],
+                   weight_ind=product_json['weight_ind'],
                    size=product_json['size'],
                    category=product_json['category'],
-                   price=product_json['price'])
+                   price=product_json['price'],
+                   image=product_json['image']
+    )
 
 
 def document_exists(document):

@@ -38,8 +38,18 @@ class ProductsSpider(scrapy.Spider):
         # only extract the description when the p is an immediate child of dd.active, otherwise it's not a description
         description = response.css('dl.definitionList dd.active>p::text').get()
         # in coop, weight and size are currently the same 'block'
-        weight = WeightStandardizer.standardize(response.css('header.gi h2.subHead::text').get())
-        size = response.css('header.gi h2.subHead::text').get()
+        weight_or_size = response.css('header.gi h2.subHead::text').get()
+        if "stuk" in weight_or_size:
+            size = weight_or_size
+            weight_q = None
+            weight_ind = None
+        else:
+             weight_q = WeightStandardizer.standardize_quantity(weight_or_size)
+             weight_ind = WeightStandardizer.standardize_indicator(weight_or_size)
+             size = None
+
+        image = response.css('div.gi b0_12 img').xpath('@data-srcset').get()
+
         # grab the n-2 th element of the item/category breadcrumb
         category = response.css('ol.cf span::text')[-2].get()
         # get both parts of the price (replace comma's by dots to make for easy float parsing)
@@ -50,4 +60,4 @@ class ProductsSpider(scrapy.Spider):
         #    print(f.read())
         #    f.close()
 
-        yield create_grocery_bot_item(product_name, page_title, description, 'coop', response.url, dt.now(), weight, size, category, price)
+        yield create_grocery_bot_item(product_name, page_title, description, 'coop', response.url, dt.now(), weight_q, weight_ind, size, category, price, image)
