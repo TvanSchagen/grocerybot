@@ -42,6 +42,8 @@ class ProductsSpider(scrapy.Spider):
         # only extract the description when the p is an immediate child of dd.active, otherwise it's not a description
         description = response.css('div.jum-summary-description p::text').get()
 
+        image_url = response.css('div.jum-product-image-figure').css("img").xpath("@data-jum-src").get()
+
         number_of_units = response.css('div.jum-sale-price-info span.jum-pack-size::text').get()
 
         if number_of_units is not None:
@@ -66,4 +68,4 @@ class ProductsSpider(scrapy.Spider):
         price_per_unit = response.css('span.jum-price-format::text').getall()[1]
 
         yield create_grocery_bot_item(product_name, page_title, description, 'jumbo', response.url, dt.now(), weight,
-                                      size, category, price)
+                                      size, category, price, image_url)

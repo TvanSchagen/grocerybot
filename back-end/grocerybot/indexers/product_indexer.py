@@ -10,7 +10,6 @@ from elasticsearch_dsl import Document, Date, Text, connections, Float, Completi
 # Define a default Elasticsearch client
 connections.create_connection(hosts=['localhost'])
 
-
 class Product(Document):
     product_name = Text(analyzer="rebuilt_dutch")
     # suggest = Completion(analyzer="rebuilt_dutch_autocomp")

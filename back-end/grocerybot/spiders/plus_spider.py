@@ -33,6 +33,7 @@ class ProductsSpider(scrapy.Spider):
         product_name = response.css("li.page-header__breadcrumb").css("a::text").getall()[-1]
         # product_name = response.css('div.pdp-right-block h1::text').get()
         page_title = response.css("title::text").get()
+        img_src = "https://www.plus.nl/" + response.css("img.lazy").xpath("@data-src").get()
 
         description = None
 
@@ -63,4 +64,4 @@ class ProductsSpider(scrapy.Spider):
             print("Could not find category")
 
         yield create_grocery_bot_item(product_name, page_title, description, 'plus', response.url, dt.now(), weight,
-                                      size, category, price)
+                                      size, category, price, img_src)
