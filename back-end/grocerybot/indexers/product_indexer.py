@@ -24,7 +24,7 @@ class Product(Document):
     size = Text()
     category = Text(analyzer="rebuilt_dutch")
     price = Float()
-    image = Text()
+    img_url = Text()
 
 
     class Index:
@@ -106,7 +106,7 @@ def convert_json_to_product(product_json):
                    size=product_json['size'],
                    category=product_json['category'],
                    price=product_json['price'],
-                   image=product_json['image']
+                   img_url=product_json['img_url']
     )
 
 

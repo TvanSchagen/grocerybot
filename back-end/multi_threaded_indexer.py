@@ -33,7 +33,8 @@ def start_indexer(output_file_name):
                               supermarket=product_json['supermarket'],
                               url=product_json['url'],
                               date=product_json['date'],
-                              weight=product_json['weight'],
+                              weight_q=product_json['weight_q'],
+                              weight_ind=product_json['weight_ind'],
                               size=product_json['size'],
                               category=product_json['category'],
                               price=product_json['price'])

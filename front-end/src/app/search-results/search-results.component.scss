@@ -11,14 +11,15 @@
 
 .title {
     float: left;
+    width: 8em;
 }
 
 .search-bar {
-    width: calc(100% - 6em);
+    width: calc(100% - 16em);
 }
 
 .search-button {
-    width: 6em;
+    width: 8em;
 }
 
 div.row {

@@ -15,30 +15,72 @@ export class SearchService {
 
   constructor(private _http: HttpClient, @Inject(APP_CONFIG) private _config) {}
 
-
   searchByQuery(
     searchQuery: string,
     sortMode: SortMode,
     from: number = 0,
-    size: number = this._config.defaultResultsLoaded,
+    size: number = this._config.defaultResultsLoaded
   ): Observable<any> {
-
     var body = {
       from: from,
       size: size,
-    }
+      aggs: {
+        max_weight: { max: { field: "weight_q" } },
+        min_weight: { min: { field: "weight_q" } }
+      }
+    };
 
     const bodyPriceSort = {
       from: from,
       size: size,
-      sort: [{ price: "asc" }]
+      sort: [{ price: "asc" }],
+      aggs: {
+        max_weight: { max: { field: "weight_q" } },
+        min_weight: { min: { field: "weight_q" } }
+      }
     };
 
     const params = new HttpParams().set("q", searchQuery);
     const headers = new HttpHeaders().set("Content-Type", "application/json");
 
     return this._http
-      .post(this.baseUrl, sortMode == SortMode.Price ? bodyPriceSort : body, { headers: headers, params: params })
+      .post(this.baseUrl, sortMode == SortMode.Price ? bodyPriceSort : body, {
+        headers: headers,
+        params: params
+      })
+      .pipe(map((response: any) => response));
+  }
+
+  searchByQueryWithWeightFilter(
+    query: string,
+    weightMin: number,
+    weightMax: number,
+  ) {
+    var body = {
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: query,
+              fields: ["page_title^3", "description", "product_name^5"]
+            }
+          },
+          filter: {
+            range: {
+              weight_q: {
+                gte: weightMin,
+                lte: weightMax
+              }
+            }
+          }
+        }
+      }
+    };
+
+    return this._http
+      .post(this.baseUrl, body, {
+        headers: new HttpHeaders().set("Content-Type", "application/json")
+      })
       .pipe(map((response: any) => response));
   }
 

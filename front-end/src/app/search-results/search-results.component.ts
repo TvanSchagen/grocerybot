@@ -26,6 +26,12 @@ export class SearchResultsComponent implements OnInit {
   resultsLoaded : number = 0;
   resultsTook: number;
 
+  sliderMinValue: number = 0;
+  sliderMaxValue: number = 0;
+
+  sliderMin: number = 0;
+  sliderMax: number = 0;
+
   sortMode: SortMode = SortMode.Relevance;
   viewMode: ViewMode = ViewMode.Regular;
 
@@ -76,6 +82,10 @@ export class SearchResultsComponent implements OnInit {
     window.open(url);
   }
 
+  filtersAppliedClicked() {
+    this.applyFiltersAndSearch();
+  }
+
   searchByQuery(query: string) {
     this._searchService.searchByQuery(query, this.sortMode)
       .subscribe(
@@ -85,9 +95,27 @@ export class SearchResultsComponent implements OnInit {
           this.resultsReturned = data.hits.total;
           this.resultsLoaded = this._config.defaultResultsLoaded;
           this.resultsTook = data.took;
+          var minVal = data.aggregations.min_weight.value
+          var maxVal = data.aggregations.max_weight.value;
+          this.sliderMin = Math.round(minVal / 100) * 100;
+          this.sliderMax = (Math.round(maxVal / 100) * 100) + 100;
+          this.sliderMinValue = this.sliderMin;
+          this.sliderMaxValue = this.sliderMax;
         },
         error => console.error(error)
       );
+  }
+
+  applyFiltersAndSearch() {
+    this._searchService.searchByQueryWithWeightFilter(this.searchQuery, this.sliderMinValue, this.sliderMaxValue).subscribe(
+      data => {
+        this.searchResults = data.hits.hits;
+        this.resultsReturned = data.hits.total;
+        this.resultsLoaded = this._config.defaultResultsLoaded;
+        this.resultsTook = data.took;
+      },
+      error => console.error(error)
+    )
   }
 
   spellSuggestionsByQuery(query: string) {

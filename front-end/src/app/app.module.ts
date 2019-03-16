@@ -11,8 +11,10 @@ import {
   MatIconModule,
   MatRippleModule,
   MatCardModule,
-  MatSelectModule
+  MatSelectModule,
+  MatExpansionModule
 } from "@angular/material";
+import { MatSliderModule } from "@angular/material/slider";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SearchResultsComponent } from "./search-results/search-results.component";
 import { SearchComponent } from "./search/search.component";
@@ -38,7 +40,9 @@ import { HttpClientModule } from "@angular/common/http";
     MatCardModule,
     MatRippleModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    MatExpansionModule,
+    MatSliderModule
   ],
   providers: [SearchService, { provide: APP_CONFIG, useValue: AppConfig }],
   bootstrap: [AppComponent]
