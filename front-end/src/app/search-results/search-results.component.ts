@@ -90,7 +90,7 @@ export class SearchResultsComponent implements OnInit {
     this._searchService.searchByQuery(query, this.sortMode)
       .subscribe(
         data => {
-          console.log(data);
+          // console.log(data);
           this.searchResults = data.hits.hits;
           this.resultsReturned = data.hits.total;
           this.resultsLoaded = this._config.defaultResultsLoaded;
@@ -122,7 +122,7 @@ export class SearchResultsComponent implements OnInit {
     this._searchService.spellingSuggestionsByQuery(query)
       .subscribe(
         data => {
-          console.log(data);
+          // console.log(data);
           this.spellSuggestions = data.suggest.suggest;
         },
         error => console.error(error)
@@ -133,10 +133,10 @@ export class SearchResultsComponent implements OnInit {
     this._searchService.searchByQuery(query, this.sortMode, this.resultsLoaded)
       .subscribe(
         data => {
-          console.log(data);
+          // console.log(data);
           this.searchResults = this.searchResults.concat(data.hits.hits);
           this.resultsLoaded += this._config.defaultResultsLoaded;
-          console.log(this.searchResults)
+          // console.log(this.searchResults);
         },
         error => console.error(error)
       )
