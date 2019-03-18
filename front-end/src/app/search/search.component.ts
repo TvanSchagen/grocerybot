@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit {
       const googleObject = new GoogleObj();
       googleObject.q = this.searchQuery;
       // tslint:disable-next-line:max-line-length
-      const bearer_token = '';
+      const bearer_token = 'ya29.c.ElrQBisN6KEjP37GAa5brJ_CRAknfm_UXgdkUxJCrP_6JaX1jePqZIFCZ2CKx8zCofsQPjly1EstYGhFvSUbYt7XXeUfXuNahIa-';
       this._translateService
         .translate(googleObject, bearer_token)
         .subscribe(

@@ -23,14 +23,14 @@ export class SearchResultsComponent implements OnInit {
   searchResults: Product[] = [];
   spellSuggestions: any;
   resultsReturned: number;
-  resultsLoaded : number = 0;
+  resultsLoaded = 0;
   resultsTook: number;
 
-  sliderMinValue: number = 0;
-  sliderMaxValue: number = 0;
+  sliderMinValue = 0;
+  sliderMaxValue = 0;
 
-  sliderMin: number = 0;
-  sliderMax: number = 0;
+  sliderMin = 0;
+  sliderMax = 0;
 
   sortMode: SortMode = SortMode.Relevance;
   viewMode: ViewMode = ViewMode.Regular;
@@ -95,8 +95,8 @@ export class SearchResultsComponent implements OnInit {
           this.resultsReturned = data.hits.total;
           this.resultsLoaded = this._config.defaultResultsLoaded;
           this.resultsTook = data.took;
-          var minVal = data.aggregations.min_weight.value
-          var maxVal = data.aggregations.max_weight.value;
+          const minVal = data.aggregations.min_weight.value;
+          const maxVal = data.aggregations.max_weight.value;
           this.sliderMin = Math.round(minVal / 100) * 100;
           this.sliderMax = (Math.round(maxVal / 100) * 100) + 100;
           this.sliderMinValue = this.sliderMin;
@@ -115,7 +115,7 @@ export class SearchResultsComponent implements OnInit {
         this.resultsTook = data.took;
       },
       error => console.error(error)
-    )
+    );
   }
 
   spellSuggestionsByQuery(query: string) {
@@ -126,7 +126,7 @@ export class SearchResultsComponent implements OnInit {
           this.spellSuggestions = data.suggest.suggest;
         },
         error => console.error(error)
-      )
+      );
   }
 
   loadMoreResults(query: string) {
@@ -139,7 +139,7 @@ export class SearchResultsComponent implements OnInit {
           // console.log(this.searchResults);
         },
         error => console.error(error)
-      )
+      );
   }
 
 }
