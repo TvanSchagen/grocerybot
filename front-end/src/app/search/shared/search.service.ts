@@ -5,6 +5,7 @@ import { HttpParams, HttpClient, HttpHeaders } from "@angular/common/http";
 import { APP_CONFIG } from "src/app/app.config";
 import { map } from "rxjs/operators";
 import { SortMode } from "src/app/enums/sort-mode";
+import { TranslateService, GoogleObj } from 'src/app/shared/services/translate.service';
 
 @Injectable({
   providedIn: "root"
@@ -13,7 +14,9 @@ export class SearchService {
   baseUrl = this._config.baseUrl + "/_search";
   searchQuery: string;
 
-  constructor(private _http: HttpClient, @Inject(APP_CONFIG) private _config) {}
+  constructor(
+    private _http: HttpClient,
+    @Inject(APP_CONFIG) private _config) {}
 
   searchByQuery(
     searchQuery: string,

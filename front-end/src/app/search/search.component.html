@@ -4,12 +4,17 @@
   </h1>
   <form>
     <mat-form-field>
-      <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here" >
+      <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here">
     </mat-form-field>
 
     <div>
       <button mat-raised-button color="primary" (click)="searchClicked()">Grocerybot Search
-      </button>  
+      </button>
+    </div>
+    <div>
+      <mat-slide-toggle name="translate" [(ngModel)]="translateChecked">
+        Translate Query
+      </mat-slide-toggle>
     </div>
   </form>
 </div>

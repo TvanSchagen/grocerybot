@@ -12,7 +12,8 @@ import {
   MatRippleModule,
   MatCardModule,
   MatSelectModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatSlideToggleModule
 } from "@angular/material";
 import { MatSliderModule } from "@angular/material/slider";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -40,6 +41,7 @@ import { HttpClientModule } from "@angular/common/http";
     MatCardModule,
     MatRippleModule,
     MatSelectModule,
+    MatSlideToggleModule,
     FormsModule,
     MatExpansionModule,
     MatSliderModule
