@@ -1,11 +1,9 @@
 import scrapy
-import time
 
 from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
 from datetime import datetime as dt
 from grocerybot.items import create_grocery_bot_item
-from grocerybot.spiders.models.page_attributes import PageAttributes
 
 
 class ProductsSpider(scrapy.Spider):

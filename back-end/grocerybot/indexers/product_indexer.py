@@ -138,8 +138,6 @@ def create_index(filename):
 
 
 def update_index(filename):
-    # get the filename from the command line args
-    # remember: sys.argv[0] is always the current file.
     if os.path.isfile(filename):
         # load json array
         input_file = open(filename)
