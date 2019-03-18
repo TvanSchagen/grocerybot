@@ -20,6 +20,8 @@ export class SearchResultsComponent implements OnInit {
   defaultResultsLoaded = this._config.defaultResultsLoaded;
 
   searchQuery: string;
+  queryTranslated: boolean;
+  originalQuery: string;
   searchResults: Product[] = [];
   spellSuggestions: any;
   resultsReturned: number;
@@ -51,6 +53,10 @@ export class SearchResultsComponent implements OnInit {
     }
     this.searchByQuery(this.searchQuery);
     this.spellSuggestionsByQuery(this.searchQuery);
+    if  (this._searchService.translated) {
+      this.queryTranslated = true;
+      this.originalQuery = this._searchService.originalQuery;
+    }
   }
 
   searchClicked() {

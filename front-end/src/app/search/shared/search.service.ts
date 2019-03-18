@@ -12,6 +12,8 @@ import { SortMode } from 'src/app/enums/sort-mode';
 export class SearchService {
   baseUrl = this._config.baseUrl + '/_search';
   searchQuery: string;
+  translated = false; // if query translation was enabled.
+  originalQuery: string; // for the cases of query translation.
 
   constructor(
     private _http: HttpClient,

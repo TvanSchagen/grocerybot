@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit {
       const googleObject = new GoogleObj();
       googleObject.q = this.searchQuery;
       // tslint:disable-next-line:max-line-length
-      const bearer_token = 'ya29.c.ElrQBisN6KEjP37GAa5brJ_CRAknfm_UXgdkUxJCrP_6JaX1jePqZIFCZ2CKx8zCofsQPjly1EstYGhFvSUbYt7XXeUfXuNahIa-';
+      const bearer_token = 'ya29.c.ElrRBqYdp4Q3v36kISZ_NvUurrkOY-zGz6a5hl0i8w9cwa_zZwg3SzrqWDYrCJNwakfulNe2NdTXvPy5-tcC_yJlrUOpT7UBRUYZZ6nuLqegg-iNUaB3mzzzp2Q';
       this._translateService
         .translate(googleObject, bearer_token)
         .subscribe(
@@ -37,6 +37,9 @@ export class SearchComponent implements OnInit {
             const transData = data.data;
             if (transData.translations) {
               if (transData.translations.length > 0) {
+                this._searchService.originalQuery = this.searchQuery;
+                this._searchService.translated = true;
+
                 this.searchQuery = transData.translations[0].translatedText;
               }
             }

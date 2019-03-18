@@ -29,6 +29,10 @@
   
   </mat-expansion-panel>
 
+  <div *ngIf="queryTranslated" class="mat-typography" style="margin-top: 10px; color: gray">
+    <p>Translated from original query: {{originalQuery}}</p>
+  </div>
+
   <div class="mat-typography" style="margin-top: 10px; color: gray">
     <p>Loaded {{ resultsReturned }} results in {{ resultsTook }} ms</p>
   </div>
