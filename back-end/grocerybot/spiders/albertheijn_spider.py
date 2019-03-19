@@ -66,7 +66,7 @@ class ProductsSpider(scrapy.Spider):
             description = product_details['_embedded']['product']['details']['summary']
             description = description.replace('[list]', '')
             description = description.replace('[*]', '')
-            size_or_weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
+            size_or_weight = product_details['_embedded']['product']['unitSize']
             
             if size_or_weight is not None:
                 if "stuk" in size_or_weight:
