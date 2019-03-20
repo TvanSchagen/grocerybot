@@ -28,7 +28,7 @@ class VomarSpider(scrapy.Spider):
     def parse_product(self, response):
         title = response.css('div.container div.container h1::text').get()
         page_title = response.css('title::text').get()
-        img_src = response.css("img").xpath("@src").get()
+        img_src = response.css('div#productImage').css("img").xpath("@src").get()
 
         page_title = page_title.replace('/', '')
         page_title = page_title.replace('_', '')
