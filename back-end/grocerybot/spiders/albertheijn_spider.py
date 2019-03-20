@@ -6,6 +6,7 @@ from grocerybot.items import create_grocery_bot_item
 from grocerybot.spiders.models.page_attributes import PageAttributes
 from grocerybot.helpers.weight_standardizer import WeightStandardizer
 
+
 def parse_json_response(response):
     # convert repsonse to json
     return json.loads(response.body)
@@ -37,7 +38,8 @@ class ProductsSpider(scrapy.Spider):
         # Find the lanes that correspond to filters - these are the ones containing links to subcategory requests
         filter_lane = next(lane for lane in json_res if lane['id'] == 'Filters')
         subcat_filters = next(
-            (sub for sub in filter_lane['_embedded']['items'][0]['_embedded']['filters'] if sub['label'] == 'Soort'), -1)
+            (sub for sub in filter_lane['_embedded']['items'][0]['_embedded']['filters'] if sub['label'] == 'Soort'),
+            -1)
 
         # If no 'Soort' section is found, then there are no more filters to be applied, so we crawl the product.
         if subcat_filters == -1:
@@ -66,28 +68,39 @@ class ProductsSpider(scrapy.Spider):
             description = product_details['_embedded']['product']['details']['summary']
             description = description.replace('[list]', '')
             description = description.replace('[*]', '')
-            size_or_weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
-            
-            if size_or_weight is not None:
-                if "stuk" in size_or_weight:
-                    size = size_or_weight
-                    weight_q = None
-                    weight_ind = None
-                else:
-                    size = None
-                    weight_q = WeightStandardizer.standardize_quantity(size_or_weight)
-                    weight_ind = WeightStandardizer.standardize_indicator(size_or_weight)
-            else:
-                size = None
-                weight_q = None
-                weight_ind = None
+            # size_or_weight = WeightStandardizer.standardize(product_details['_embedded']['product']['unitSize'])
+
+            images = product_details['_embedded']['product']['images']
+            img_src = None
+            if images:
+                first_image = images[0]
+                if first_image:
+                    img_src = first_image['link']['href']
+
+            # if size_or_weight is not None:
+            #     if "stuk" in size_or_weight:
+            #         size = size_or_weight
+            #         weight_q = None
+            #         weight_ind = None
+            #     else:
+            #         size = None
+            #         weight_q = WeightStandardizer.standardize_quantity(size_or_weight)
+            #         weight_ind = WeightStandardizer.standardize_indicator(size_or_weight)
+            # else:
+            #     size = None
+            #     weight_q = None
+            #     weight_ind = None
+
+            size = None
+            weight_q = None
+            weight_ind = None
 
             price = product_details['_embedded']['product']['priceLabel']['now']
-            image = None
 
             # filename = f'data/ah/{title}.html'
             # with open(filename, 'wb') as f:
             #     f.write(response.body)
 
             yield create_grocery_bot_item(product_name, page_title, description,
-                                          'albert heijn ah', response.url, dt.now(), weight_q, weight_ind, size, '', price, image)
+                                          'albert heijn ah', response.url, dt.now(), weight_q, weight_ind, size, '',
+                                          price, img_src)
