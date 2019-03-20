@@ -35,7 +35,7 @@ class VomarSpider(scrapy.Spider):
         # get the h5 headers that contain the information we need to extract
         headers = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('h5::text').getall()
         desc_index = headers.index(next(header for header in headers if header == 'Beschrijving'))
-        weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
+        # weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
 
         description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[desc_index].get()
         weight_or_size = response.css('div.unitQuantity span::text').get()

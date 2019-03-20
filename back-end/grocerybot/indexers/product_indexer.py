@@ -10,6 +10,7 @@ from elasticsearch_dsl import Document, Date, Text, connections, Float, Completi
 # Define a default Elasticsearch client
 connections.create_connection(hosts=['localhost'])
 
+
 class Product(Document):
     product_name = Text(analyzer="rebuilt_dutch")
     # suggest = Completion(analyzer="rebuilt_dutch_autocomp")
@@ -25,7 +26,6 @@ class Product(Document):
     category = Text(analyzer="rebuilt_dutch")
     price = Float()
     img_url = Text()
-
 
     class Index:
         name = 'product'
@@ -107,7 +107,7 @@ def convert_json_to_product(product_json):
                    category=product_json['category'],
                    price=product_json['price'],
                    img_url=product_json['img_url']
-    )
+                   )
 
 
 def document_exists(document):

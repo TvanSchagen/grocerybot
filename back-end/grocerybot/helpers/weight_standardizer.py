@@ -11,7 +11,10 @@ class WeightStandardizer:
             return None
         weight = input.replace(" ", "")
         weight = weight.replace(",", ".")
-        match = re.search("(\d+(g|ml|l|liter|gram|kilogram|kg|dl|cl|deciliter|centiliter))", weight).group()
+        match = re.search("(\d+(g|ml|l|liter|gram|kilogram|kg|dl|cl|deciliter|centiliter))", weight)
+        if match is None:
+            return None
+        match = match.group()
         if re.match("(\d+(l|kg|liter|kilogram))", match):
             quantity = re.sub("\D", "", match)
             quantity = float(quantity) * 1000
@@ -30,7 +33,10 @@ class WeightStandardizer:
         if input is None:
             return None
         weight = input.replace(" ", "")
-        match = re.search("(\d+(g|ml|l|gram|kilogram|kg))", weight).group()
+        match = re.search("(\d+(g|ml|l|gram|kilogram|kg))", weight)
+        if match is None:
+            return None
+        match = match.group()
         if re.match("(\d+(kg|kilogram))", match):
             indicator = "g"
         elif re.match("(\d+(l|liter|dl|deciliter|cl|centiliter))", match):
