@@ -22,6 +22,9 @@ class WeightStandardizer:
         elif re.match(".+(cl|centiliter)", match):
             quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
             quantity = float(quantity) * 10
+        elif re.match(".+(ml|milliliter)", match):
+            quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
+            quantity = float(quantity)
         elif re.match(".+(l|kg|liter|kilogram)", match):
             quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
             quantity = float(quantity) * 1000
