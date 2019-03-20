@@ -99,10 +99,7 @@ export class SearchResultsComponent implements OnInit {
           // console.log(data);
           this.searchResults = data.hits.hits;
           // Parse results
-          this.searchResults.forEach(product => {
-            product._source.img_url = 'http://' + product._source.img_url;
-            product.supermarketImg = 'assets/img/' + product._source.supermarket.split(' ')[0] + '.png';
-          });
+          this.parseSearchResults();
           this.resultsReturned = data.hits.total;
           this.resultsLoaded = this._config.defaultResultsLoaded;
           this.resultsTook = data.took;
@@ -116,6 +113,18 @@ export class SearchResultsComponent implements OnInit {
         error => console.error(error)
       );
   }
+  parseSearchResults(): any {
+    this.searchResults.forEach(product => {
+      product.supermarketImg = 'assets/img/' + product._source.supermarket + '.png';
+
+      // Domain-specific manipulations
+      if (product._source.supermarket === 'vomar') {
+        product._source.img_url = 'http://' + product._source.img_url;
+      } else if (product._source.supermarket === 'albert heijn ah') {
+        product.supermarketImg = 'assets/img/' + 'ah' + '.png';
+      }
+    });
+  }
 
   applyFiltersAndSearch() {
     this._searchService.searchByQueryWithWeightFilter(this.searchQuery, this.sliderMinValue, this.sliderMaxValue).subscribe(
@@ -128,6 +137,7 @@ export class SearchResultsComponent implements OnInit {
         this.resultsReturned = data.hits.total;
         this.resultsLoaded = this._config.defaultResultsLoaded;
         this.resultsTook = data.took;
+        this.parseSearchResults();
       },
       error => console.error(error)
     );
