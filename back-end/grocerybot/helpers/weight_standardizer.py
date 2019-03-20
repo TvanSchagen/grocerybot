@@ -9,37 +9,39 @@ class WeightStandardizer:
     def standardize_quantity(input):
         if input is None:
             return None
-        weight = input.replace(" ", "")
+        weight = input.lower()
+        weight = weight.replace(" ", "")
         weight = weight.replace(",", ".")
-        match = re.search("(\d+(g|ml|l|liter|gram|kilogram|kg|dl|cl|deciliter|centiliter))", weight)
+        match = re.search("(.+(g|ml|l|liter|gram|kilogram|kg|dl|cl|deciliter|centiliter))", weight)
         if match is None:
             return None
         match = match.group()
-        if re.match("(\d+(l|kg|liter|kilogram))", match):
-            quantity = re.sub("\D", "", match)
-            quantity = float(quantity) * 1000
-        elif re.match("(\d+(dl|deciliter))", match):
-            quantity = re.sub("\D", "", match)
-            quantity = float(quantity) * 10
-        elif re.match("(\d+(cl|centiliter))", match):
-            quantity = re.sub("\D", "", match)
+        if re.match(".+(dl|deciliter)", match):
+            quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
             quantity = float(quantity) * 100
+        elif re.match(".+(cl|centiliter)", match):
+            quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
+            quantity = float(quantity) * 10
+        elif re.match(".+(l|kg|liter|kilogram)", match):
+            quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
+            quantity = float(quantity) * 1000
         else:
-            quantity = float(re.sub("\D", "", match))
+            quantity = re.search("[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?", match).group()
         return int(quantity)
 
     @staticmethod
     def standardize_indicator(input):
         if input is None:
             return None
-        weight = input.replace(" ", "")
-        match = re.search("(\d+(g|ml|l|gram|kilogram|kg))", weight)
+        weight = input.lower()
+        weight = weight.replace(" ", "")
+        match = re.search(".+(g|ml|l|liter|gram|kilogram|kg|dl|cl|deciliter|centiliter)", weight)
         if match is None:
             return None
         match = match.group()
-        if re.match("(\d+(kg|kilogram))", match):
+        if re.match(".+(kg|kilogram)", match):
             indicator = "g"
-        elif re.match("(\d+(l|liter|dl|deciliter|cl|centiliter))", match):
+        elif re.match(".+(l|liter|dl|deciliter|cl|centiliter)", match):
             indicator = "ml"
         else:
             indicator = re.sub("\d", "", match)
