@@ -98,6 +98,11 @@ export class SearchResultsComponent implements OnInit {
         data => {
           // console.log(data);
           this.searchResults = data.hits.hits;
+          // Parse results
+          this.searchResults.forEach(product => {
+            product._source.img_url = 'http://' + product._source.img_url;
+            product.supermarketImg = 'assets/img/' + product._source.supermarket.split(' ')[0] + '.png';
+          });
           this.resultsReturned = data.hits.total;
           this.resultsLoaded = this._config.defaultResultsLoaded;
           this.resultsTook = data.took;

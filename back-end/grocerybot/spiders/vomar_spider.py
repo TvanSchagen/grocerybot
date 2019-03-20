@@ -28,14 +28,14 @@ class VomarSpider(scrapy.Spider):
     def parse_product(self, response):
         title = response.css('div.container div.container h1::text').get()
         page_title = response.css('title::text').get()
-        img_src = response.css("img").xpath("@src").get()
+        img_src = response.css('div#productImage').css("img").xpath("@src").get()
 
         page_title = page_title.replace('/', '')
         page_title = page_title.replace('_', '')
         # get the h5 headers that contain the information we need to extract
         headers = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('h5::text').getall()
         desc_index = headers.index(next(header for header in headers if header == 'Beschrijving'))
-        weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
+        # weight_index = headers.index(next(header for header in headers if header == 'Inhoud en gewicht'))
 
         description = response.css('div.container div.container div.productInfo div.col-md-6')[0].css('p::text')[desc_index].get()
         weight_or_size = response.css('div.unitQuantity span::text').get()

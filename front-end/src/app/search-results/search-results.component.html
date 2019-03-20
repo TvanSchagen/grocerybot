@@ -67,8 +67,13 @@
         <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
           <div [className]="viewMode == 1 ? 'header-compact' : 'header'">
               <div class="header-aside">
-                  <span>{{product._source.supermarket}}</span>
-                  <!--<img [src]="product._source.img_url">-->
+                  <!-- <span>{{product.supermarketImg}}</span> -->
+                  <div *ngIf="product._source">
+                    <span><img [src]="product.supermarketImg"></span>
+                   </div>
+                  <div *ngIf="product._source">
+                   <span><img [src]="product._source.img_url" width="70" height="70"></span>
+                  </div>
               </div>
             <div class="header-main">
                 <a target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
