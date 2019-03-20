@@ -127,14 +127,12 @@ def create_index(filename):
         input_file = open(filename)
         json_array = json.load(input_file)
 
-        for product_json in json_array:
-            # create and save the product
-            product = convert_json_to_product(product_json)
-            product.save()
-
-        print('Successfully saved data from: ' + filename)
-    else:
-        print('File not found: ' + filename)
+            for product_json in json_array:
+                # create and save the product
+                product = convert_json_to_product(product_json)
+                product.save()
+                
+            print('Successfully saved data from: ' + file)
 
 
 def update_index(filename):
