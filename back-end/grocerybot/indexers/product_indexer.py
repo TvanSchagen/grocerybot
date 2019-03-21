@@ -5,7 +5,7 @@ from datetime import datetime
 
 import requests
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Document, Date, Text, connections, Float, Completion, Search
+from elasticsearch_dsl import Document, Date, Text, connections, Float, Completion, Search, Keyword
 
 # Define a default Elasticsearch client
 connections.create_connection(hosts=['localhost'])
@@ -17,7 +17,7 @@ class Product(Document):
     suggest = Completion()
     page_title = Text(analyzer="rebuilt_dutch")
     description = Text(analyzer="rebuilt_dutch")
-    supermarket = Text()
+    supermarket = Keyword()
     url = Text()
     date = Date()
     weight_q = Float()
@@ -117,22 +117,23 @@ def document_exists(document):
     return json_data['count'] > 0
 
 
-def create_index(filename):
+def create_index(directory):
     Product.init()
 
     # get the filename from the command line args
     # remember: sys.argv[0] is always the current file.
-    if os.path.isfile(filename):
-        # load json array
-        input_file = open(filename)
-        json_array = json.load(input_file)
+    for file in os.listdir(directory):
+        if file.endswith('.json'):
+            # load json array
+            input_file = open(os.path.join(directory, file))
+            json_array = json.load(input_file)
 
-        for product_json in json_array:
-            # create and save the product
-            product = convert_json_to_product(product_json)
-            product.save()
+            for product_json in json_array:
+                # create and save the product
+                product = convert_json_to_product(product_json)
+                product.save()
 
-        print('Successfully saved data from: ' + filename)
+        print('Successfully saved data from: ' + file)
 
 
 def update_index(filename):
@@ -158,14 +159,14 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         # get the filename from the command line args
         # remember: sys.argv[0] is always the current file.
-        filepath = sys.argv[1]
+        input_path = sys.argv[1]
         operation = sys.argv[2]
         if operation == 'create':
-            create_index(filepath)
+            create_index(input_path)
         elif operation == 'update':
-            update_index(filepath)
+            update_index(input_path)
     else:
-        print('Args should be given in the format [path of file to index] [create or update].')
+        print('Args should be given in the format [path of file/directory to index] [create or update].')
 
 # Display cluster health
 # print(connections.get_connection().cluster.health())
