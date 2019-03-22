@@ -65,6 +65,7 @@
     <ul class="card">
       <li *ngFor="let product of searchResults" [className]="viewMode == 1 ? 'comp-mode' : 'reg-mode'">
         <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
+          <img *ngIf="viewMode == 1" mat-card-image [src]="product._source.img_url">
           <div [className]="viewMode == 1 ? 'header-compact' : 'header'">
               <div class="header-aside">
                   <!-- <span>{{product.supermarketImg}}</span> -->
@@ -72,7 +73,7 @@
                     <span><img [src]="product.supermarketImg"></span>
                    </div>
                   <div *ngIf="product._source">
-                   <span [className]="viewMode == 1 ? 'img-comp' : 'img-reg'"><img [src]="product._source.img_url" width="70" height="70"></span>
+                   <span *ngIf="viewMode !== 1"><img [src]="product._source.img_url" width="70" height="70"></span>
                   </div>
               </div>
             <div class="header-main">
