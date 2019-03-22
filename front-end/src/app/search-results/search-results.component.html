@@ -72,7 +72,7 @@
                     <span><img [src]="product.supermarketImg"></span>
                    </div>
                   <div *ngIf="product._source">
-                   <span><img [src]="product._source.img_url" width="70" height="70"></span>
+                   <span [className]="viewMode == 1 ? 'img-comp' : 'img-reg'"><img [src]="product._source.img_url" width="70" height="70"></span>
                   </div>
               </div>
             <div class="header-main">

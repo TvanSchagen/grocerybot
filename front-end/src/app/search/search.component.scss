@@ -5,3 +5,21 @@
 div.row {
     text-align: center
 }
+
+.search-box {
+    width: 30%;
+}
+
+.center-in-page {
+    height: 50em;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+
+.options-wrapper {
+    button {
+        margin-right: 2em;
+    }
+}

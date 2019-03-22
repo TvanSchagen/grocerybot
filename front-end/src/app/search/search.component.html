@@ -1,17 +1,15 @@
-<div class="row mat-typography">
-  <h1>
+<div class="row mat-typography center-in-page">
+  <h1 class="title">
     Welcome to Grocerybot!
   </h1>
-  <form>
-    <mat-form-field>
+  <form class="search-wrapper">
+    <mat-form-field class="search-box">
       <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here">
     </mat-form-field>
 
-    <div>
+    <div class="options-wrapper">
       <button mat-raised-button color="primary" (click)="searchClicked()">Grocerybot Search
       </button>
-    </div>
-    <div>
       <mat-slide-toggle name="translate" [(ngModel)]="translateChecked">
         Translate Query
       </mat-slide-toggle>
