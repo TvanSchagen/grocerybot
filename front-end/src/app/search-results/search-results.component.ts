@@ -20,6 +20,7 @@ export class SearchResultsComponent implements OnInit {
   defaultResultsLoaded = this._config.defaultResultsLoaded;
 
   searchQuery: string;
+  evalMode: boolean;
   queryTranslated: boolean;
   originalQuery: string;
   searchResults: Product[] = [];
@@ -42,13 +43,16 @@ export class SearchResultsComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     @Inject(APP_CONFIG) private _config
-  ) { }
+  ) {
+    this.evalMode = false;
+  }
 
   ngOnInit() {
     this.searchQuery = this._searchService.getSearchQuery();
     if (!this.searchQuery) {
       this._route.paramMap.subscribe(params => {
         this.searchQuery = params.get('query');
+        this.evalMode = params.get('eval') === 'true';
       });
     }
     this.searchByQuery(this.searchQuery);
@@ -60,7 +64,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   searchClicked() {
-    this._router.navigate(['search-results', this.searchQuery]);
+    this._router.navigate(['search-results', this.searchQuery, this.evalMode]);
     this.searchByQuery(this.searchQuery);
     this.spellSuggestionsByQuery(this.searchQuery);
   }
@@ -164,6 +168,10 @@ export class SearchResultsComponent implements OnInit {
         },
         error => console.error(error)
       );
+  }
+
+  feedbackButtonClicked(product, isRelevant) {
+    console.log(product, isRelevant);
   }
 
 }

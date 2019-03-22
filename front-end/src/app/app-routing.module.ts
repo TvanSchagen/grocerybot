@@ -5,7 +5,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 
 const routes: Routes = [
   { path: 'search', component: SearchComponent },
-  { path: 'search-results/:query', component: SearchResultsComponent },
+  { path: 'search-results/:query/:eval', component: SearchResultsComponent },
   { path: '', redirectTo: 'search', pathMatch: 'full' },
   { path: '**', redirectTo: 'search', pathMatch: 'prefix' },
 ];

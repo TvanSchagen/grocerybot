@@ -64,7 +64,7 @@
 
     <ul class="card">
       <li *ngFor="let product of searchResults" [className]="viewMode == 1 ? 'comp-mode' : 'reg-mode'">
-        <mat-card matRipple (click)="productClicked(product._source.url)" class="cursor-pointer no-text-select">
+        <mat-card matRipple>
           <img *ngIf="viewMode == 1" mat-card-image [src]="product._source.img_url">
           <div [className]="viewMode == 1 ? 'header-compact' : 'header'">
               <div class="header-aside">
@@ -77,7 +77,7 @@
                   </div>
               </div>
             <div class="header-main">
-                <a target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery"></a>
+                <a (click)="productClicked(product._source.url)" target="_blank" [innerHtml]="product._source.product_name | highlight:searchQuery" style="cursor:pointer"></a>
                 <br><span class="product-url" [innerHtml]="product._source.url"></span>
                 <p [innerHtml]="product._source.page_title | highlight:searchQuery"></p>
             </div>
@@ -90,8 +90,14 @@
             </div>
           </div>
           <mat-card-content class="last-child">
-
+            <p align="right" *ngIf="evalMode">Is this document relevant?</p>
           </mat-card-content>
+          <mat-card-actions *ngIf="evalMode">
+            <button mat-button class="feedback" (click)="feedbackButtonClicked(product, false)"
+                mat-raised-button color="warn">No</button>
+            <button mat-button class="feedback" (click)="feedbackButtonClicked(product, true)"
+                mat-raised-button color="green" style="background:green; color: white">Yes</button>
+        </mat-card-actions>
         </mat-card>
       </li>
     </ul>

@@ -10,7 +10,9 @@ import { GoogleObj, TranslateService } from '../shared/services/translate.servic
 })
 export class SearchComponent implements OnInit {
   searchQuery: string;
+  assessorName: string;
   translateChecked: boolean;
+  evaluationChecked: boolean;
 
   constructor(
     private _searchService: SearchService,
@@ -19,6 +21,7 @@ export class SearchComponent implements OnInit {
 
     this.searchQuery = '';
     this.translateChecked = false;
+    this.evaluationChecked = false;
   }
 
   ngOnInit() {
@@ -29,7 +32,7 @@ export class SearchComponent implements OnInit {
       const googleObject = new GoogleObj();
       googleObject.q = this.searchQuery;
       // tslint:disable-next-line:max-line-length
-      const bearer_token = 'ya29.c.ElrRBqYdp4Q3v36kISZ_NvUurrkOY-zGz6a5hl0i8w9cwa_zZwg3SzrqWDYrCJNwakfulNe2NdTXvPy5-tcC_yJlrUOpT7UBRUYZZ6nuLqegg-iNUaB3mzzzp2Q';
+      const bearer_token = 'ya29.c.ElrUBh-kodCvs8MIWvcdVpjmmSbp3gIRq9QcZMcbPjr0ZjUe1iNRPahftmT3gCu03Jn3zmItZoa1L6rua-jcs95QIb2rRiftxckBQ5ClIciT8Wtc4cSM3o0XPCM';
       this._translateService
         .translate(googleObject, bearer_token)
         .subscribe(
@@ -54,7 +57,7 @@ export class SearchComponent implements OnInit {
 
   navigateToSearchResults() {
     this._searchService.setSearchQuery(this.searchQuery);
-    this._router.navigate(['/search-results', this.searchQuery]);
+    this._router.navigate(['/search-results', this.searchQuery, this.evaluationChecked]);
   }
 }
 

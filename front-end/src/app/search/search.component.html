@@ -10,9 +10,22 @@
     <div class="options-wrapper">
       <button mat-raised-button color="primary" (click)="searchClicked()">Grocerybot Search
       </button>
-      <mat-slide-toggle name="translate" [(ngModel)]="translateChecked">
-        Translate Query
-      </mat-slide-toggle>
+      <div>
+        <mat-slide-toggle name="translate" [(ngModel)]="translateChecked">
+          Translate Query
+        </mat-slide-toggle>
+      </div>
+      <div>
+        <mat-slide-toggle name="evaluate" [(ngModel)]="evaluationChecked">
+          Evaluation Mode
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="evaluation-form" *ngIf="evaluationChecked">
+      <mat-form-field class="search-box">
+          <input name="assessorName" matInput [(ngModel)]='assessorName' placeholder="Please enter your name">
+      </mat-form-field>
     </div>
   </form>
 </div>
