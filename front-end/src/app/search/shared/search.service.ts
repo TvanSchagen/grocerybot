@@ -26,6 +26,16 @@ export class SearchService {
     size: number = this._config.defaultResultsLoaded
   ): Observable<any> {
     const body = {
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: searchQuery,
+              fields: ['product_name^10', 'category^3', 'page_title^2', 'description']
+            }
+          }
+        }
+      },
       from: from,
       size: size,
       aggs: {
@@ -35,6 +45,16 @@ export class SearchService {
     };
 
     const bodyPriceSort = {
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: searchQuery,
+              fields: ['product_name^10', 'category^3', 'page_title^2', 'description']
+            }
+          }
+        }
+      },
       from: from,
       size: size,
       sort: [{ price: 'asc' }],
@@ -44,13 +64,11 @@ export class SearchService {
       }
     };
 
-    const params = new HttpParams().set('q', searchQuery);
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this._http
       .post(this.baseUrl, sortMode === SortMode.Price ? bodyPriceSort : body, {
         headers: headers,
-        params: params
       })
       .pipe(map((response: any) => response));
   }
@@ -66,7 +84,7 @@ export class SearchService {
           must: {
             multi_match: {
               query: query,
-              fields: ['page_title^3', 'description', 'product_name^5']
+              fields: ['product_name^10', 'category^3', 'page_title^2', 'description']
             }
           },
           filter: {
