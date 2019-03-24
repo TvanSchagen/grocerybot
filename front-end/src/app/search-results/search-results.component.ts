@@ -4,6 +4,9 @@ import { Product } from '../models/product';
 import { Router, ActivatedRoute } from '@angular/router';
 import { APP_CONFIG } from 'src/app/app.config';
 import { SortMode } from 'src/app/enums/sort-mode';
+import { EvaluationService } from '../shared/services/evaluation.service';
+import { Evaluation } from '../models/evaluation';
+import { SafeUrl } from '@angular/platform-browser';
 
 enum ViewMode {
   Regular,
@@ -20,7 +23,13 @@ export class SearchResultsComponent implements OnInit {
   defaultResultsLoaded = this._config.defaultResultsLoaded;
 
   searchQuery: string;
+
   evalMode: boolean;
+  evaluationFile: SafeUrl;
+  assessorName: string;
+  totalEvaluated: number;
+  lastRank = 0; // rank assigned to last loaded document, used to rank next documents.
+
   queryTranslated: boolean;
   originalQuery: string;
   searchResults: Product[] = [];
@@ -40,26 +49,35 @@ export class SearchResultsComponent implements OnInit {
 
   constructor(
     private _searchService: SearchService,
+    private _evalService: EvaluationService,
     private _route: ActivatedRoute,
     private _router: Router,
     @Inject(APP_CONFIG) private _config
   ) {
     this.evalMode = false;
+    this.assessorName = '';
+    this.totalEvaluated = 0;
+    this.evaluationFile = '';
   }
 
   ngOnInit() {
-    this.searchQuery = this._searchService.getSearchQuery();
-    if (!this.searchQuery) {
-      this._route.paramMap.subscribe(params => {
-        this.searchQuery = params.get('query');
-        this.evalMode = params.get('eval') === 'true';
-      });
-    }
+    this._route.paramMap.subscribe(params => {
+      this.searchQuery = params.get('query');
+
+      this.evalMode = params.get('eval') === 'true';
+      this.assessorName = params.get('name');
+    });
+
     this.searchByQuery(this.searchQuery);
     this.spellSuggestionsByQuery(this.searchQuery);
     if  (this._searchService.translated) {
       this.queryTranslated = true;
       this.originalQuery = this._searchService.originalQuery;
+    }
+
+    // Eval mode
+    if (this.evalMode) {
+      this._evalService.initialize(this.assessorName, this.searchQuery);
     }
   }
 
@@ -119,7 +137,9 @@ export class SearchResultsComponent implements OnInit {
   }
 
   parseSearchResults(): any {
+    this.lastRank = 0; // because it parses all the results always - fix if we have time
     this.searchResults.forEach(product => {
+      product.rank = ++this.lastRank;
       product.supermarketImg = 'assets/img/' + product._source.supermarket.split(' ')[0] + '.png';
 
       // Domain-specific manipulations
@@ -159,10 +179,7 @@ export class SearchResultsComponent implements OnInit {
         data => {
           // console.log(data);
           this.searchResults = this.searchResults.concat(data.hits.hits);
-          this.searchResults.forEach(product => {
-            product._source.img_url = 'http://' + product._source.img_url;
-            product.supermarketImg = 'assets/img/' + product._source.supermarket.split(' ')[0] + '.png';
-          });
+          this.parseSearchResults();
           this.resultsLoaded += this._config.defaultResultsLoaded;
           // console.log(this.searchResults);
         },
@@ -170,8 +187,16 @@ export class SearchResultsComponent implements OnInit {
       );
   }
 
-  feedbackButtonClicked(product, isRelevant) {
-    console.log(product, isRelevant);
+  feedbackButtonClicked(product: Product, isRelevant) {
+
+    this._evalService.addEvaluation(new Evaluation(product.rank, isRelevant));
+
+    product.evaluated = true;
+    this.totalEvaluated++;
+
+    if (this.totalEvaluated === 20) {
+      this.evaluationFile = this._evalService.finishEvaluation();
+    }
   }
 
 }
