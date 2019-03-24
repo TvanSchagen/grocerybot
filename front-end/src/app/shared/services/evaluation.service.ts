@@ -35,7 +35,12 @@ export class EvaluationService {
     this.metrics.push(this.calcPrecisionAt(5));
     this.metrics.push(this.calcPrecisionAt(10));
     this.metrics.push(this.calcPrecisionAt(20));
-    this.metrics.push(this.calcReciprocalRank());
+    const recRank = this.calcReciprocalRank();
+    if (recRank) {
+      this.metrics.push(recRank);
+    }
+
+    this.metrics.push(this.calcAveragePrecision());
   }
 
   calcPrecisionAt(rank: number): Metric {
@@ -54,12 +59,25 @@ export class EvaluationService {
   }
 
   calcReciprocalRank(): Metric {
-    const firstRelevant = this.evaluations.filter(ev => ev.relevant === true)[0];
+    const firstRelevant = this.evaluations.filter(ev => ev.relevant)[0];
     if (firstRelevant) {
       return new Metric('reciprocalRanking', 1 / firstRelevant.rank);
     } else {
       return null;
     }
+  }
+
+  calcAveragePrecision(): Metric {
+    let sum = 0;
+    const relevantDocs = this.evaluations.filter(ev => ev.relevant);
+    relevantDocs.forEach(doc => {
+      const p = this.calcPrecisionAt(doc.rank);
+      sum += p.value;
+    });
+
+    const ap = sum / relevantDocs.length;
+
+    return new Metric('averagePrecision', ap);
   }
 
   finishEvaluation(): SafeUrl {

@@ -29,6 +29,7 @@ export class SearchResultsComponent implements OnInit {
   assessorName: string;
   totalEvaluated: number;
   lastRank = 0; // rank assigned to last loaded document, used to rank next documents.
+  metricsDisplay = '';
 
   queryTranslated: boolean;
   originalQuery: string;
@@ -190,6 +191,7 @@ export class SearchResultsComponent implements OnInit {
   feedbackButtonClicked(product: Product, isRelevant) {
 
     this._evalService.addEvaluation(new Evaluation(product.rank, isRelevant));
+    this.updateMetricsDisplay();
 
     product.evaluated = true;
     this.totalEvaluated++;
@@ -197,6 +199,13 @@ export class SearchResultsComponent implements OnInit {
     if (this.totalEvaluated === 20) {
       this.evaluationFile = this._evalService.finishEvaluation();
     }
+  }
+
+  updateMetricsDisplay() {
+    this.metricsDisplay = '';
+    this._evalService.metrics.forEach(metric => {
+      this.metricsDisplay += metric.name + ': ' + metric.value.toFixed(3) + ', ';
+    });
   }
 
 }
