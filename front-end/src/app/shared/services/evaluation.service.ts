@@ -84,6 +84,7 @@ export class EvaluationService {
     const evalSession = {
       assessor: this.assessor,
       date: this.date,
+      query: this.query,
       metrics: this.metrics,
       evaluations: this.evaluations};
 
