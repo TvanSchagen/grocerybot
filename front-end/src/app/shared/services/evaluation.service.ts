@@ -1,6 +1,7 @@
 import { Evaluation } from './../../models/evaluation';
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Metric } from 'src/app/models/metric';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class EvaluationService {
   query: string;
   date: Date;
   evaluations: Evaluation[];
-  metrics: [];
+  metrics: Metric[];
 
   constructor(private _sanitizer: DomSanitizer) {}
 
@@ -30,10 +31,14 @@ export class EvaluationService {
   }
 
   calculateMetrics() {
-    this.calcPrecisionAt(5);
+    this.metrics = [];
+    this.metrics.push(this.calcPrecisionAt(5));
+    this.metrics.push(this.calcPrecisionAt(10));
+    this.metrics.push(this.calcPrecisionAt(20));
+    this.metrics.push(this.calcReciprocalRank());
   }
 
-  calcPrecisionAt(rank: number) {
+  calcPrecisionAt(rank: number): Metric {
     let relevantCount = 0;
 
     this.evaluations
@@ -43,12 +48,25 @@ export class EvaluationService {
           relevantCount ++;
         }
     });
+
+    const p = relevantCount / rank;
+    return new Metric('p@' + rank, p);
+  }
+
+  calcReciprocalRank(): Metric {
+    const firstRelevant = this.evaluations.filter(ev => ev.relevant === true)[0];
+    if (firstRelevant) {
+      return new Metric('reciprocalRanking', 1 / firstRelevant.rank);
+    } else {
+      return null;
+    }
   }
 
   finishEvaluation(): SafeUrl {
     const evalSession = {
       assessor: this.assessor,
       date: this.date,
+      metrics: this.metrics,
       evaluations: this.evaluations};
 
       const json_data = JSON.stringify(evalSession);
