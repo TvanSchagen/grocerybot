@@ -86,6 +86,12 @@ export class SearchResultsComponent implements OnInit {
     this._router.navigate(['search-results', this.searchQuery, this.evalMode, this.assessorName]);
     this.searchByQuery(this.searchQuery);
     this.spellSuggestionsByQuery(this.searchQuery);
+
+    if (this.evalMode) {
+      this.totalEvaluated = 0;
+      this._evalService.initialize(this.assessorName, this.searchQuery);
+      this.updateMetricsDisplay();
+    }
   }
 
   loadMoreClicked() {
