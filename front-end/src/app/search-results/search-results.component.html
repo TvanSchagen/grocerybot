@@ -8,7 +8,15 @@
       <input name="searchQuery" matInput [(ngModel)]='searchQuery' placeholder="Enter your search query here">
     </mat-form-field>
 
-    <button class="search-button" mat-button (click)="searchClicked()">Search</button>
+    <button mat-button class="search-button" (click)="searchClicked()">Search</button>
+
+    <div *ngIf="evalMode" class="mat-typography" style="margin-top: 10px; color: gray">
+        <p>Evalutation Mode - Assessor: {{assessorName}}</p>
+        <p>Total Documents Assessed: {{totalEvaluated}}/20</p>
+        <p>{{metricsDisplay}}</p>
+        <a *ngIf="totalEvaluated >= 20" [(href)]="evaluationFile" download="evaluation.json">Download Evaluation File</a>
+    </div>
+  
 
   </form>
 </div>
@@ -90,9 +98,9 @@
             </div>
           </div>
           <mat-card-content class="last-child">
-            <p align="right" *ngIf="evalMode">Is this document relevant?</p>
+            <p align="right" *ngIf="evalMode && !product.evaluated">Is this document relevant?</p>
           </mat-card-content>
-          <mat-card-actions *ngIf="evalMode">
+          <mat-card-actions *ngIf="evalMode && !product.evaluated">
             <button mat-button class="feedback" (click)="feedbackButtonClicked(product, false)"
                 mat-raised-button color="warn">No</button>
             <button mat-button class="feedback" (click)="feedbackButtonClicked(product, true)"

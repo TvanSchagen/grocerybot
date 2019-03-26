@@ -25,6 +25,8 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._searchService.translated = false;
+    this.assessorName = ' ';
   }
 
   searchClicked() {
@@ -32,7 +34,7 @@ export class SearchComponent implements OnInit {
       const googleObject = new GoogleObj();
       googleObject.q = this.searchQuery;
       // tslint:disable-next-line:max-line-length
-      const bearer_token = 'ya29.c.ElrUBh-kodCvs8MIWvcdVpjmmSbp3gIRq9QcZMcbPjr0ZjUe1iNRPahftmT3gCu03Jn3zmItZoa1L6rua-jcs95QIb2rRiftxckBQ5ClIciT8Wtc4cSM3o0XPCM';
+      const bearer_token = 'ya29.c.ElrUBnL0kds8P_BGi9gp8C25OaK5e3-y_EUHAqAp7gMFR__2OrqRy0REWIvui9JcDz1YeAqeGPfrAEZ6npYHdYKjdNh2p49WweZf-mwx9UOBYF5xIpwzrIq3nP0';
       this._translateService
         .translate(googleObject, bearer_token)
         .subscribe(
@@ -57,7 +59,7 @@ export class SearchComponent implements OnInit {
 
   navigateToSearchResults() {
     this._searchService.setSearchQuery(this.searchQuery);
-    this._router.navigate(['/search-results', this.searchQuery, this.evaluationChecked]);
+    this._router.navigate(['/search-results', this.searchQuery, this.evaluationChecked, this.assessorName]);
   }
 }
 
