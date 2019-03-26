@@ -1,0 +1,4 @@
+[build]
+    base    =   "front-end"
+    command =   "ng build"
+    publish =   "dist"
