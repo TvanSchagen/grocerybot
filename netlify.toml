@@ -1,4 +1,4 @@
 [build]
     base    =   "front-end"
-    command =   "ng build"
-    publish =   "dist"
+    command =   "ng build --prod"
+    publish =   "front-end/dist/front-end"
