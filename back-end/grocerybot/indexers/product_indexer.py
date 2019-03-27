@@ -8,7 +8,10 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Document, Date, Text, connections, Float, Completion, Search, Keyword
 
 # Define a default Elasticsearch client
-connections.create_connection(hosts=['localhost'])
+# connections.create_connection(hosts=['localhost'])
+connections.create_connection(
+    hosts=['https://e084291822ed42bab3766eefee360eb2.eu-west-1.aws.found.io:9243'],
+    http_auth='dim:asd123')
 
 
 class Product(Document):

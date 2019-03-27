@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Product } from 'src/app/models/product';
-import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { APP_CONFIG } from 'src/app/app.config';
 import { map } from 'rxjs/operators';
 import { SortMode } from 'src/app/enums/sort-mode';
@@ -14,6 +13,10 @@ export class SearchService {
   searchQuery: string;
   translated = false; // if query translation was enabled.
   originalQuery: string; // for the cases of query translation.
+
+  headers = new HttpHeaders()
+      .set('Authorization', 'Basic ' + btoa('dim:asd123'))
+      .set('Content-Type', 'application/json');
 
   constructor(
     private _http: HttpClient,
@@ -64,11 +67,14 @@ export class SearchService {
       }
     };
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    // const headers = new HttpHeaders()
+    //   .set('Authorization', 'Basic dim:asd123')
+    //   .set('Content-Type', 'application/json');
+
 
     return this._http
       .post(this.baseUrl, sortMode === SortMode.Price ? bodyPriceSort : body, {
-        headers: headers,
+        headers: this.headers,
       })
       .pipe(map((response: any) => response));
   }
@@ -101,7 +107,10 @@ export class SearchService {
 
     return this._http
       .post(this.baseUrl, body, {
-        headers: new HttpHeaders().set('Content-Type', 'application/json')
+        headers: this.headers
+        // headers: new HttpHeaders()
+        //   .set('Authorization', 'Basic dim:asd123')
+        //   .set('Content-Type', 'application/json')
       })
       .pipe(map((response: any) => response));
   }
@@ -120,7 +129,10 @@ export class SearchService {
 
     return this._http
       .post(this.baseUrl, body, {
-        headers: new HttpHeaders().set('Content-Type', 'application/json')
+          headers: this.headers
+        // headers: new HttpHeaders()
+        //   .set('Authorization', 'Basic dim:asd123')
+        //   .set('Content-Type', 'application/json')
       })
       .pipe(map((response: any) => response));
   }
