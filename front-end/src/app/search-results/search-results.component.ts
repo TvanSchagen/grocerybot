@@ -202,7 +202,7 @@ export class SearchResultsComponent implements OnInit {
     product.evaluated = true;
     this.totalEvaluated++;
 
-    if (this.totalEvaluated === 20) {
+    if (this.totalEvaluated === 10) {
       this.evaluationFile = this._evalService.finishEvaluation();
     }
   }

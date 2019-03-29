@@ -12,9 +12,9 @@
 
     <div *ngIf="evalMode" class="mat-typography" style="margin-top: 10px; color: gray">
         <p>Evalutation Mode - Assessor: {{assessorName}}</p>
-        <p>Total Documents Assessed: {{totalEvaluated}}/20</p>
+        <p>Total Documents Assessed: {{totalEvaluated}}/10</p>
         <p>{{metricsDisplay}}</p>
-        <a *ngIf="totalEvaluated >= 20" [(href)]="evaluationFile" download="evaluation.json">Download Evaluation File</a>
+        <a *ngIf="totalEvaluated >= 10" [(href)]="evaluationFile" download="evaluation.json">Download Evaluation File</a>
     </div>
   
 
