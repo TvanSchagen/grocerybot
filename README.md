@@ -1,27 +1,27 @@
 # GroceryBot
 
-Open source crawlers for groceries
+Grocerybot is a Dutch Supermarket Grocery search engine that crawls, indexes and retrieves more than 65000 products across 5 supermarket chains in the country, including AH, Jumbo, Plus, Coop and Vomar.
 
-## Installing
+## Features
+- Search through more than 65000 products across 5 supermarket chains.
+- Parallel, multi-threaded crawling and indexing scripts.
+- Search metadata, term highlighting, spell checking.
+- Regular and Compacy view modes.
+- Sort by price.
+- Filter by weight/quantity.
+- Query translation from English to Dutch
+- Interactive evaluation interface with instant metrics calculator 
 
-### Front-end
+## Technology Stack
+- Crawler, Indexer: ScraPy/Python.
+- Backend: Elasticsearch/Python.
+- Frontend: Angular 7.
 
-To install packages `npm install`
+## Screenshots
 
-### Back-end
-
-To install packages `pip install -r requirements.txt`
-
-## Running
-
-### Front-end
-
-To run `npm start`
-
-### Back-end
-
-To run a single spider `scrapy crawl <spider name>`
-
-To run all spiders in multiple processes `python multi_threaded_crawler.py`
-
-To index all outputs to ElasticSearch `python multi_threaded_indexer.py` (make sure ElasticSearch instance is running at http://localhost:9200)
+Grocerybot results interface(regular mode):
+![interface](screenshots/grocerybot_interface.png)
+Grocerybot results interface(compact mode):
+![compact interface](screenshots/grocerybot_interface_compact.png)
+Grocerybot instant evaluation interface:
+![evaluation interface](screenshots/grocerybot_evaluation.png)
