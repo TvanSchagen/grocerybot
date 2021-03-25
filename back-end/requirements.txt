@@ -54,7 +54,7 @@ pylint==2.2.2
 pyOpenSSL==19.0.0
 python-dateutil==2.7.5
 pytz==2018.9
-PyYAML==3.13
+PyYAML==5.4
 querystring-parser==1.2.3
 queuelib==1.5.0
 requests==2.21.0
